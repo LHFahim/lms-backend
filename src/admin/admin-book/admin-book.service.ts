@@ -4,6 +4,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 
 import { UserEntity } from '../../user/entities/user.entity';
+import { CurrencyEnum } from '../../wallet/entities/wallet.entity';
 import { AdminAuthService } from '../admin-auth/auth.service';
 import { BookDto, CreateAdminBookDto, RestockAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
 import { BookEntity } from './entities/admin-book.entity';
@@ -23,6 +24,7 @@ export class AdminBookService extends SerializeService<BookEntity> {
 
         const doc = await this.bookModel.create({
             ...body,
+            currency: CurrencyEnum.BDT,
             borrowedBy: [],
             isAvailable: true,
             isDeleted: false,

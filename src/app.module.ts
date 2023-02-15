@@ -12,6 +12,7 @@ import { TodoModule } from './todo/todo.module';
 import { BooksModule } from './books/books.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
+import { BorrowBookModule } from './borrow-book/borrow-book.module';
 
 @Module({
     imports: [
@@ -38,6 +39,8 @@ import { WalletModule } from './wallet/wallet.module';
         BooksModule,
 
         WalletModule,
+
+        BorrowBookModule,
     ],
     controllers: [AppController],
     providers: [AppService],

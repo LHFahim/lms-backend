@@ -5,12 +5,14 @@ import { BookDto } from '../admin/admin-book/dto/admin-book.dto';
 import { BookEntity } from '../admin/admin-book/entities/admin-book.entity';
 import { SerializableService } from '../interfaces/serializable.class';
 import { UserEntity } from '../user/entities/user.entity';
+import { BorrowBookService } from './../borrow-book/borrow-book.service';
 
 @Injectable()
 export class BooksService extends SerializableService<BookEntity> {
     constructor(
         @InjectModel(BookEntity) private readonly bookModel: ReturnModelType<typeof BookEntity>,
         @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
+        private readonly borrowBookService: BorrowBookService,
     ) {
         super(BookEntity);
     }
@@ -40,8 +42,9 @@ export class BooksService extends SerializableService<BookEntity> {
             { $inc: { quantity: -1 }, $addToSet: { borrowedBy: userId } },
             { new: true },
         );
-
         if (!doc) throw new BadRequestException('Request cannot be completed');
+
+        await this.borrowBookService.addBorrowedBookDetails(userId, _id);
 
         return this.toJSON(doc, BookDto);
     }
@@ -55,6 +58,8 @@ export class BooksService extends SerializableService<BookEntity> {
         doc.borrowedBy = newBorrow;
 
         await doc.save();
+
+        await this.borrowBookService.changeStatusForBorrowedBook(userId, _id);
 
         return this.toJSON(doc, BookDto);
     }

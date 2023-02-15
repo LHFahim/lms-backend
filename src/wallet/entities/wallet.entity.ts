@@ -5,13 +5,13 @@ import { IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsNumber } from 'class-valida
 import { Model } from '../../../libs/utils/src';
 import { UserEntity } from '../../user/entities/user.entity';
 
-export enum BalanceEnum {
+export enum CurrencyEnum {
     POINTS = 'POINTS',
     BDT = 'BDT',
 }
 
 @Model('wallet', true)
-export class Wallet {
+export class WalletEntity {
     @Expose()
     @IsNumber()
     @IsNotEmpty()
@@ -20,10 +20,11 @@ export class Wallet {
     balance: number;
 
     @Expose()
-    @IsEnum(BalanceEnum)
+    @IsEnum(CurrencyEnum)
     @IsNotEmpty()
-    @Prop({ required: true, default: BalanceEnum.BDT })
-    type: BalanceEnum;
+    @ApiProperty({ required: true, default: CurrencyEnum.BDT })
+    @Prop({ required: true, default: CurrencyEnum.BDT })
+    currency: CurrencyEnum;
 
     @Expose()
     @IsMongoId()

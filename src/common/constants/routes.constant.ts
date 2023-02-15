@@ -58,6 +58,9 @@ export const Routes = {
         borrowOneBook: ':id/borrow',
         returnOneBook: ':id/return',
     },
+    [ControllersEnum.Wallet]: {
+        reduceBalance: ':id/:userId',
+    },
 
     // admin routes below
     [ControllersEnum.AdminStatus]: {

@@ -9,8 +9,9 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { TodoModule } from './todo/todo.module';
 
-import { UserModule } from './user/user.module';
 import { BooksModule } from './books/books.module';
+import { UserModule } from './user/user.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
     imports: [
@@ -35,6 +36,8 @@ import { BooksModule } from './books/books.module';
         TodoModule,
 
         BooksModule,
+
+        WalletModule,
     ],
     controllers: [AppController],
     providers: [AppService],

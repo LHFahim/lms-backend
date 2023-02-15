@@ -17,4 +17,5 @@ export enum ControllersEnum {
 
     Todo = 'todo',
     Books = 'books',
+    Wallet = 'wallet',
 }

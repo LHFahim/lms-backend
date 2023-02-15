@@ -33,7 +33,6 @@ export class BooksService extends SerializableService<BookEntity> {
                 break;
             }
         }
-
         if (flag) throw new BadRequestException('You have already borrowed this book');
 
         const doc = await this.bookModel.findOneAndUpdate(

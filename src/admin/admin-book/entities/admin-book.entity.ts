@@ -32,8 +32,8 @@ export class BookEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsNumber()
     @IsNotEmpty()
-    @ApiProperty({ required: false })
-    @Prop({ required: false, trim: true })
+    @ApiProperty({ required: false, minimum: 0 })
+    @Prop({ required: false, trim: true, min: 0 })
     quantity: number;
 
     @Expose()
@@ -63,5 +63,5 @@ export class BookEntity extends DocumentCTWithTimeStamps {
     @IsNotEmpty()
     @Type(() => UserEntity)
     @Prop({ required: true, ref: () => UserEntity })
-    createdBy: Ref<UserEntity>;
+    addedBy: Ref<UserEntity>;
 }

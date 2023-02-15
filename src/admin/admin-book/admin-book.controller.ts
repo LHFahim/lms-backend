@@ -7,7 +7,7 @@ import { APIVersions, ControllersEnum } from '../../common';
 import { JwtAuthGuard } from '../admin-auth/guards/jwt-auth.guard';
 import { AdminBookService } from './admin-book.service';
 
-import { CreateAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
+import { CreateAdminBookDto, RestockAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
 
 @ApiTags('Admin ===> Books')
 @Serialize()
@@ -35,6 +35,11 @@ export class AdminBookController {
     @Patch(Routes[ControllersEnum.AdminBooks].updateOneBook)
     updateOneBook(@UserId() userId: string, @ResourceId() id: string, @Body() body: UpdateAdminBookDto) {
         return this.adminBookService.updateOneBook(userId, id, body);
+    }
+
+    @Patch(Routes[ControllersEnum.AdminBooks].restockOneBook)
+    restockOneBook(@UserId() userId: string, @ResourceId() id: string, @Body() body: RestockAdminBookDto) {
+        return this.adminBookService.restockOneBook(userId, id, body);
     }
 
     @Delete(Routes[ControllersEnum.AdminBooks].deleteOneBook)

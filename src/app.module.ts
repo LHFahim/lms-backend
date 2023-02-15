@@ -10,6 +10,7 @@ import { ConfigService } from './config/config.service';
 import { TodoModule } from './todo/todo.module';
 
 import { UserModule } from './user/user.module';
+import { BooksModule } from './books/books.module';
 
 @Module({
     imports: [
@@ -32,6 +33,8 @@ import { UserModule } from './user/user.module';
         AdminModule,
 
         TodoModule,
+
+        BooksModule,
     ],
     controllers: [AppController],
     providers: [AppService],

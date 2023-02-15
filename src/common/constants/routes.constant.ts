@@ -24,9 +24,6 @@ export const Routes = {
         changeEmailSendCode: 'change-email/send',
         changeEmailVerifyCode: 'change-email/verify',
     },
-    [ControllersEnum.Roles]: {
-        list: '',
-    },
 
     [ControllersEnum.Otps]: {
         send: '',
@@ -47,8 +44,6 @@ export const Routes = {
 
     [ControllersEnum.Discussion]: {
         createDiscussion: '',
-        createDiscussionForProject: 'project/:projectId',
-        createDiscussionForProjectMilestone: 'project/:projectId/milestone/:milestoneId',
 
         updateDiscussion: ':id',
         deleteDiscussion: ':id',
@@ -56,6 +51,15 @@ export const Routes = {
     [ControllersEnum.Status]: {
         findAllStatus: '',
     },
+    [ControllersEnum.Settings]: {
+        updateNotificationSettings: 'notifications',
+    },
+    [ControllersEnum.Books]: {
+        borrowOneBook: ':id/borrow',
+        returnOneBook: ':id/return',
+    },
+
+    // admin routes below
     [ControllersEnum.AdminStatus]: {
         createStatus: '',
         findAllStatuses: '',
@@ -73,9 +77,7 @@ export const Routes = {
         findAllClientUsers: 'client-users',
         blockClientUser: ':id',
     },
-    [ControllersEnum.Settings]: {
-        updateNotificationSettings: 'notifications',
-    },
+
     [ControllersEnum.AdminAuth]: {
         register: 'register',
 
@@ -101,6 +103,7 @@ export const Routes = {
         updateOneBook: ':id',
         deleteOneBook: ':id',
         borrowOneBook: ':id/borrow',
-        returnOneBook: ':id/return',
+
+        restockOneBook: ':id/restock',
     },
 };

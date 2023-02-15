@@ -4,6 +4,7 @@ import { OAuthService } from 'libs/oauth/src';
 import { OAuthConfigInjectionToken } from 'libs/oauth/src/constants';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { ConfigService } from 'src/config/config.service';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { AdminAuthController } from './auth.controller';
 import { AdminAuthService } from './auth.service';
 import { OTPEntity } from './entities/otp';
@@ -31,7 +32,7 @@ import { OTPEntity } from './entities/otp';
         OAuthService,
     ],
     imports: [
-        TypegooseModule.forFeature([OTPEntity]),
+        TypegooseModule.forFeature([OTPEntity, UserEntity]),
         JWTModule.forFeatureAsync({
             useFactory: (config: ConfigService) => ({
                 secret: config.jwt.secret,

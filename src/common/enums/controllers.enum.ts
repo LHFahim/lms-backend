@@ -16,4 +16,5 @@ export enum ControllersEnum {
     Settings = 'settings',
 
     Todo = 'todo',
+    Books = 'books',
 }

@@ -30,6 +30,7 @@ export class AdminAuthService extends SerializableService<UserEntity> {
         private userService: UserService,
         @InjectModel(OTPEntity)
         private readonly otpModel: ReturnModelType<typeof OTPEntity>,
+        @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
     ) {
         super(UserEntity);
     }
@@ -394,5 +395,9 @@ export class AdminAuthService extends SerializableService<UserEntity> {
         // await this.mailService.sendEmailVerifyEmail(user.email, token);
 
         return 'OTP sent';
+    }
+
+    async isAdmin(userId: string) {
+        return await this.userModel.findOne({ _id: userId, panelType: PanelType.ADMIN });
     }
 }

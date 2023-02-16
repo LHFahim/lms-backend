@@ -1,8 +1,9 @@
 import { DocumentCTWithTimeStamps, Model } from '@app/utils';
 import { ApiProperty } from '@nestjs/swagger';
-import { Prop } from '@typegoose/typegoose';
-import { Exclude, Expose } from 'class-transformer';
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Prop, Ref } from '@typegoose/typegoose';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { WalletEntity } from '../../wallet/entities/wallet.entity';
 
 export enum AuthProvider {
     EMAIL = 'EMAIL',
@@ -85,6 +86,13 @@ export class UserEntity extends DocumentCTWithTimeStamps {
     @ApiProperty({ required: false, enum: PanelType })
     @Prop({ required: true, enum: PanelType })
     panelType: PanelType;
+
+    @Expose()
+    @IsMongoId()
+    @Type(() => WalletEntity)
+    @ApiProperty({ required: true })
+    @Prop({ required: true, ref: () => WalletEntity })
+    walletId?: Ref<WalletEntity>;
 
     @Prop({ required: false, type: Boolean, default: true })
     @Expose()

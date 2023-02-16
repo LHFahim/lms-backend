@@ -6,7 +6,7 @@ import { Model } from '../../../libs/utils/src';
 import { UserEntity } from '../../user/entities/user.entity';
 import { BookEntity } from './../../admin/admin-book/entities/admin-book.entity';
 
-@Model('borrowed books', true)
+@Model('borrowed-books', true)
 export class BorrowBookEntity {
     @Expose()
     @IsMongoId()

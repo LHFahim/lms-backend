@@ -5,6 +5,7 @@ import { BookDto } from '../admin/admin-book/dto/admin-book.dto';
 import { BookEntity } from '../admin/admin-book/entities/admin-book.entity';
 import { SerializableService } from '../interfaces/serializable.class';
 import { UserEntity } from '../user/entities/user.entity';
+import { WalletService } from '../wallet/wallet.service';
 import { BorrowBookService } from './../borrow-book/borrow-book.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class BooksService extends SerializableService<BookEntity> {
         @InjectModel(BookEntity) private readonly bookModel: ReturnModelType<typeof BookEntity>,
         @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
         private readonly borrowBookService: BorrowBookService,
+        private readonly walletService: WalletService,
     ) {
         super(BookEntity);
     }
@@ -45,6 +47,9 @@ export class BooksService extends SerializableService<BookEntity> {
         if (!doc) throw new BadRequestException('Request cannot be completed');
 
         await this.borrowBookService.addBorrowedBookDetails(userId, _id);
+
+        const userDoc = await this.userModel.findOne({ _id: userId });
+        await this.walletService.reduceBalance(userId, userDoc.walletId.toString(), { cost: doc.cost });
 
         return this.toJSON(doc, BookDto);
     }

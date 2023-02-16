@@ -1,17 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../libs/utils/src/serializer/serialize.service';
+import { UserEntity } from '../user/entities/user.entity';
 import { ReduceBalanceDto, WalletDto } from './dto/wallet.dto';
 import { CurrencyEnum, WalletEntity } from './entities/wallet.entity';
 
 @Injectable()
 export class WalletService extends SerializeService<WalletEntity> {
-    constructor(@InjectModel(WalletEntity) private readonly walletModel: ReturnModelType<typeof WalletEntity>) {
+    constructor(
+        @InjectModel(WalletEntity) private readonly walletModel: ReturnModelType<typeof WalletEntity>,
+        @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
+    ) {
         super(WalletEntity);
     }
 
     async createWallet(userId: string) {
+        const walletExists = await this.walletModel.findOne({ owner: userId });
+        if (walletExists) throw new BadRequestException('You already have a wallet');
+
         const doc = await this.walletModel.create({
             balance: 50,
             currency: CurrencyEnum.BDT,
@@ -19,6 +26,8 @@ export class WalletService extends SerializeService<WalletEntity> {
             isDeleted: false,
             owner: userId,
         });
+
+        await this.userModel.findOneAndUpdate({ _id: userId }, { walletId: doc._id }, { new: true });
 
         return this.toJSON(doc, WalletDto);
     }

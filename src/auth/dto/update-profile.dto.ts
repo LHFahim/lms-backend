@@ -1,7 +1,5 @@
-import { PickType } from '@nestjs/swagger';
-import { UserEntity } from '../../user/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
-export class UpdateProfileDto extends PickType(UserEntity, [
-  'firstName',
-  'lastName',
-]) {}
+import { PickType } from '@nestjs/swagger';
+
+export class UpdateProfileDto extends PickType(UserEntity, ['firstName', 'lastName', 'walletId']) {}

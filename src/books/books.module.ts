@@ -4,12 +4,14 @@ import { BookEntity } from '../admin/admin-book/entities/admin-book.entity';
 import { BorrowBookService } from '../borrow-book/borrow-book.service';
 import { BorrowBookEntity } from '../borrow-book/entities/borrow-book.entity';
 import { UserEntity } from '../user/entities/user.entity';
+import { WalletEntity } from '../wallet/entities/wallet.entity';
+import { WalletService } from '../wallet/wallet.service';
 import { BooksController } from './books.controller';
 import { BooksService } from './books.service';
 
 @Module({
-    imports: [TypegooseModule.forFeature([BookEntity, UserEntity, BorrowBookEntity])],
+    imports: [TypegooseModule.forFeature([BookEntity, UserEntity, BorrowBookEntity, WalletEntity])],
     controllers: [BooksController],
-    providers: [BooksService, BorrowBookService],
+    providers: [BooksService, BorrowBookService, WalletService],
 })
 export class BooksModule {}

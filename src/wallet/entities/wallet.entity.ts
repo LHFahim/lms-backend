@@ -3,12 +3,8 @@ import { Prop, Ref } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
 import { IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsNumber } from 'class-validator';
 import { Model } from '../../../libs/utils/src';
+import { CurrencyEnum } from '../../common/enums/lms.enum';
 import { UserEntity } from '../../user/entities/user.entity';
-
-export enum CurrencyEnum {
-    POINTS = 'POINTS',
-    BDT = 'BDT',
-}
 
 @Model('wallet', true)
 export class WalletEntity {

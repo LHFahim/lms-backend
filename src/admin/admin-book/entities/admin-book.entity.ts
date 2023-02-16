@@ -3,8 +3,9 @@ import { Prop, Ref } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Model } from '../../../../libs/utils/src';
+import { CategoryEnum, CurrencyEnum } from '../../../common/enums/lms.enum';
 import { UserEntity } from '../../../user/entities/user.entity';
-import { CurrencyEnum } from '../../../wallet/entities/wallet.entity';
+
 import { DocumentCTWithTimeStamps } from './../../../../libs/utils/src/serializer/defaultClasses';
 
 @Model('books', true)
@@ -22,6 +23,14 @@ export class BookEntity extends DocumentCTWithTimeStamps {
     @ApiProperty({ required: false })
     @Prop({ required: true, trim: true })
     author: string;
+
+    @Expose()
+    @IsEnum(CategoryEnum, { each: true })
+    @IsNotEmpty()
+    @IsArray()
+    @ApiProperty({ required: true, isArray: true, enum: CategoryEnum })
+    @Prop({ required: true, default: CategoryEnum.ACADEMIC })
+    category: CategoryEnum[];
 
     @Expose()
     @IsString()

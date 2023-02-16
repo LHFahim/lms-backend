@@ -2,9 +2,10 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../libs/utils/src/serializer/serialize.service';
+import { CurrencyEnum } from '../common/enums/lms.enum';
 import { UserEntity } from '../user/entities/user.entity';
 import { ReduceBalanceDto, WalletDto } from './dto/wallet.dto';
-import { CurrencyEnum, WalletEntity } from './entities/wallet.entity';
+import { WalletEntity } from './entities/wallet.entity';
 
 @Injectable()
 export class WalletService extends SerializeService<WalletEntity> {

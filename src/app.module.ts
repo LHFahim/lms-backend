@@ -10,9 +10,9 @@ import { ConfigService } from './config/config.service';
 import { TodoModule } from './todo/todo.module';
 
 import { BooksModule } from './books/books.module';
+import { BorrowBookModule } from './borrow-book/borrow-book.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
-import { BorrowBookModule } from './borrow-book/borrow-book.module';
 
 @Module({
     imports: [

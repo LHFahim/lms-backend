@@ -8,6 +8,7 @@ export class CreateAdminBookDto extends PickType(BookEntity, [
     'cost',
     'currency',
     'quantity',
+    'category',
 ]) {}
 
 export class UpdateAdminBookDto extends PartialType(CreateAdminBookDto) {}

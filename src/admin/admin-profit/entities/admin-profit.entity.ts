@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
-import { Model } from '../../../../libs/utils/src';
+import { DocumentCTWithTimeStamps, Model } from '../../../../libs/utils/src';
 import { CurrencyEnum } from '../../../common/enums/lms.enum';
 
 @Model('profit', true)
-export class ProfitEntity {
+export class ProfitEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsNumber()
     @IsNotEmpty()

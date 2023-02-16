@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Ref } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
 import { IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsNumber } from 'class-validator';
-import { Model } from '../../../libs/utils/src';
+import { DocumentCTWithTimeStamps, Model } from '../../../libs/utils/src';
 import { CurrencyEnum } from '../../common/enums/lms.enum';
 import { UserEntity } from '../../user/entities/user.entity';
 
 @Model('wallet', true)
-export class WalletEntity {
+export class WalletEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsNumber()
     @IsNotEmpty()

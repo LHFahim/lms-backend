@@ -6,7 +6,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { SerializableService } from '../interfaces/serializable.class';
 import { UserDto } from '../user/dto/user.dto';
 import { AuthProvider, PanelType, UserEntity } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
+import { UserService } from '../user/services/user.service';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { AuthProfileDto, VerifyEmailDto } from './dto/auth-user.dto';
 import {

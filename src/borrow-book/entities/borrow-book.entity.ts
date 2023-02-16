@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Ref } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
 import { IsBoolean, IsDateString, IsMongoId, IsNotEmpty } from 'class-validator';
-import { Model } from '../../../libs/utils/src';
+import { DocumentCTWithTimeStamps, Model } from '../../../libs/utils/src';
 import { UserEntity } from '../../user/entities/user.entity';
 import { BookEntity } from './../../admin/admin-book/entities/admin-book.entity';
 
 @Model('borrowed-books', true)
-export class BorrowBookEntity {
+export class BorrowBookEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsMongoId()
     @IsNotEmpty()

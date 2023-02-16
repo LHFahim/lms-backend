@@ -1,10 +1,10 @@
 import { StorageService } from '@app/storage';
 import { optimizeImage } from '@app/utils/image';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { SerializableService } from '../interfaces/serializable.class';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthProvider, UserEntity } from './entities/user.entity';
-import { UserRepository } from './repository/user.repository';
+import { SerializableService } from '../../interfaces/serializable.class';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { AuthProvider, UserEntity } from '../entities/user.entity';
+import { UserRepository } from '../repository/user.repository';
 
 export interface UserCreatePayload {
     email: string;

@@ -14,7 +14,7 @@ export class BorrowBookController {
     constructor(private readonly borrowBookService: BorrowBookService) {}
 
     @Get(Routes[ControllersEnum.BorrowBooks].findBorrowedBooks)
-    findOneBorrowedBook(@UserId() userId: string) {
-        return this.borrowBookService.findOneBorrowedBook(userId);
+    findBorrowedBooks(@UserId() userId: string) {
+        return this.borrowBookService.findBorrowedBooks(userId);
     }
 }

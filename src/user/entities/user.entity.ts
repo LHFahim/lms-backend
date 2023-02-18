@@ -90,8 +90,8 @@ export class UserEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsMongoId()
     @Type(() => WalletEntity)
-    @ApiProperty({ required: true })
-    @Prop({ required: true, ref: () => WalletEntity })
+    @ApiProperty({ required: false })
+    @Prop({ required: false, ref: () => WalletEntity })
     walletId?: Ref<WalletEntity>;
 
     @Prop({ required: false, type: Boolean, default: true })

@@ -19,7 +19,5 @@ export class UserInterestsService extends SerializableService<UserInterestsEntit
             { $addToSet: { interests: { $each: interets }, booksRead: bookId } },
             { upsert: true },
         );
-
-        console.log(doc);
     }
 }

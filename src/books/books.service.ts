@@ -21,6 +21,11 @@ export class BooksService extends SerializableService<BookEntity> {
         super(BookEntity);
     }
 
+    async findBooks(userId: string) {
+        const docs = await this.bookModel.find();
+        return this.toJSON(docs, BookDto);
+    }
+
     async borrowOneBook(userId: string, _id: string) {
         const existingDoc = await this.bookModel.findOne({
             _id,

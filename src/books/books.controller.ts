@@ -1,4 +1,4 @@
-import { Controller, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize, UserId } from '../../libs/utils/src';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -13,6 +13,11 @@ import { BooksService } from './books.service';
 @Controller({ path: ControllersEnum.Books, version: APIVersions.V1 })
 export class BooksController {
     constructor(private readonly booksService: BooksService) {}
+
+    @Get(Routes[ControllersEnum.Books].findBooks)
+    findBooks(@UserId() userId: string) {
+        return this.booksService.findBooks(userId);
+    }
 
     @Patch(Routes[ControllersEnum.Books].borrowOneBook)
     borrowOneBook(@UserId() userId: string, @ResourceId() id: string) {

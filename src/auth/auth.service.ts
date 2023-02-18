@@ -36,6 +36,7 @@ export class AuthService extends SerializableService<UserEntity> {
     private readonly THREE_MINUTE = 1000 * 60 * 3;
 
     async register(dto: RegisterDto) {
+        console.log('🚀 ~ file: auth.service.ts:39 ~ AuthService ~ register ~ dto', dto);
         const user = await this.userService.findByEmail(dto.email);
 
         if ((dto.authProvider === AuthProvider.FACEBOOK || dto.authProvider === AuthProvider.GOOGLE) && user)

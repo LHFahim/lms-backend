@@ -8,6 +8,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import { UserInterestsService } from '../user/services/user-interests.service';
 import { WalletService } from '../wallet/wallet.service';
 import { BorrowBookService } from './../borrow-book/borrow-book.service';
+import { FilteredBooksDto } from './dto/book.dto';
 
 @Injectable()
 export class BooksService extends SerializableService<BookEntity> {
@@ -24,6 +25,11 @@ export class BooksService extends SerializableService<BookEntity> {
     async findBooks(userId: string) {
         const docs = await this.bookModel.find();
         return this.toJSON(docs, BookDto);
+    }
+
+    async findOneBook(userId: string, _id: string) {
+        const doc = await this.bookModel.findOne({ _id });
+        return this.toJSON(doc, BookDto);
     }
 
     async borrowOneBook(userId: string, _id: string) {
@@ -76,5 +82,11 @@ export class BooksService extends SerializableService<BookEntity> {
         await this.borrowBookService.changeStatusForBorrowedBook(userId, _id);
 
         return this.toJSON(doc, BookDto);
+    }
+
+    async findFilteredBooks(userId: string, body: FilteredBooksDto) {
+        const docs = await this.bookModel.find({ category: { $all: body.category } });
+
+        return this.toJSON(docs, BookDto);
     }
 }

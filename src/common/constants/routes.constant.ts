@@ -59,6 +59,7 @@ export const Routes = {
         findOneBook: ':id',
         borrowOneBook: ':id/borrow',
         returnOneBook: ':id/return',
+        findFilteredBooks: '/filter',
     },
     [ControllersEnum.Wallet]: {
         createWallet: '',

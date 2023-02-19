@@ -61,9 +61,6 @@ export class BooksService extends SerializableService<BookEntity> {
 
         await this.borrowBookService.addBorrowedBookDetails(userId, _id);
 
-        const userDoc = await this.userModel.findOne({ _id: userId });
-        await this.walletService.reduceBalance(userId, userDoc.walletId.toString(), { cost: doc.cost });
-
         await this.interestService.addInterestsToUser(userId, doc._id, doc.category);
 
         return this.toJSON(doc, BookDto);

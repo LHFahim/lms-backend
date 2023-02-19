@@ -2,7 +2,6 @@ import { SerializeService } from '@app/utils/serializer/serialize.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
-import { CurrencyEnum } from '../../common/enums/lms.enum';
 
 import { UserEntity } from '../../user/entities/user.entity';
 
@@ -25,7 +24,7 @@ export class AdminBookService extends SerializeService<BookEntity> {
 
         const doc = await this.bookModel.create({
             ...body,
-            currency: CurrencyEnum.BDT,
+
             borrowedBy: [],
             isAvailable: true,
             isDeleted: false,

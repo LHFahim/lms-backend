@@ -42,15 +42,15 @@ export class BookEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsNumber()
     @IsNotEmpty()
-    @ApiProperty({ required: true, minimum: 0 })
-    @Prop({ required: true, trim: true, min: 0 })
+    @ApiProperty({ required: false, minimum: 0 })
+    @Prop({ required: false, trim: true, min: 0 })
     cost: number;
 
     @Expose()
     @IsEnum(CurrencyEnum)
     @IsNotEmpty()
-    @ApiProperty({ required: true, default: CurrencyEnum.BDT })
-    @Prop({ required: true, default: CurrencyEnum.BDT })
+    @ApiProperty({ required: false })
+    @Prop({ required: false })
     currency: CurrencyEnum;
 
     @Expose()

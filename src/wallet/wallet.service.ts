@@ -34,7 +34,7 @@ export class WalletService extends SerializeService<WalletEntity> {
     }
 
     async findOneWallet(userId: string, _id: string) {
-        const doc = await this.walletModel.findOne({ _id, owner: userId });
+        const doc = await this.walletModel.findOne({ _id }); //owner: userId
         if (!doc) throw new NotFoundException('Wallet is not found');
 
         return this.toJSON(doc, WalletDto);

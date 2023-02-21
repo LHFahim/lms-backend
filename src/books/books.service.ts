@@ -73,6 +73,7 @@ export class BooksService extends SerializableService<BookEntity> {
         const newBorrow = doc.borrowedBy.filter((el) => el.toString() !== userId);
 
         doc.borrowedBy = newBorrow;
+        doc.quantity++;
 
         await doc.save();
 

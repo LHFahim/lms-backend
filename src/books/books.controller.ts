@@ -35,6 +35,7 @@ export class BooksController {
     }
     @Post(Routes[ControllersEnum.Books].findFilteredBooks)
     findFilteredBooks(@UserId() userId: string, @Body() body: FilteredBooksDto) {
+        console.log(body);
         return this.booksService.findFilteredBooks(userId, body);
     }
 }

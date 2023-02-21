@@ -3,7 +3,7 @@ export enum CurrencyEnum {
     BDT = 'BDT',
 }
 
-export enum CategoryEnum {
+export enum BookTagsEnum {
     ACADEMIC = 'ACADEMIC',
     LITERATURE = 'LITERATURE',
     PHILOSOPHY = 'PHILOSOPHY',

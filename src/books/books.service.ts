@@ -61,7 +61,7 @@ export class BooksService extends SerializableService<BookEntity> {
 
         await this.borrowBookService.addBorrowedBookDetails(userId, _id);
 
-        await this.interestService.addInterestsToUser(userId, doc._id, doc.category);
+        await this.interestService.addInterestsToUser(userId, doc._id, doc.tags);
 
         return this.toJSON(doc, BookDto);
     }
@@ -82,7 +82,7 @@ export class BooksService extends SerializableService<BookEntity> {
     }
 
     async findFilteredBooks(userId: string, body: FilteredBooksDto) {
-        const docs = await this.bookModel.find({ category: { $all: body.category } });
+        const docs = await this.bookModel.find({ tags: { $all: body.tags } });
 
         return this.toJSON(docs, BookDto);
     }

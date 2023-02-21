@@ -69,6 +69,9 @@ export const Routes = {
     [ControllersEnum.BorrowBooks]: {
         findBorrowedBooks: '',
     },
+    [ControllersEnum.UserInterests]: {
+        findUserInterests: '',
+    },
 
     // admin routes below
     [ControllersEnum.AdminStatus]: {

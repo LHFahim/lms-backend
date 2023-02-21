@@ -7,7 +7,7 @@ export class CreateAdminBookDto extends PickType(BookEntity, [
     'description',
 
     'quantity',
-    'category',
+    'tags',
     'image',
 ]) {}
 

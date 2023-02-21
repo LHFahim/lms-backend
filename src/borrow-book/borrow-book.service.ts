@@ -36,7 +36,7 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
             bookId,
             borrower: userId,
             borrowedDate: new Date().toDateString(),
-            returnDate: add(new Date(), { days: 30 }),
+            returnDate: add(new Date(), { days: 15 }).toDateString(),
             isReturned: false,
         });
     }

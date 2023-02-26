@@ -68,6 +68,13 @@ export class BookEntity extends DocumentCTWithTimeStamps {
     image: string;
 
     @Expose()
+    @IsNumber()
+    @IsNotEmpty()
+    @ApiProperty({ required: true, minimum: 0 })
+    @Prop({ required: true, trim: true, min: 0 })
+    shelf: number;
+
+    @Expose()
     @IsArray()
     @ApiProperty({ required: true })
     @Prop({ required: true, default: [] })

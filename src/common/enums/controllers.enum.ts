@@ -12,7 +12,6 @@ export enum ControllersEnum {
 
     Otps = 'otps',
 
-    Discussion = 'discussion',
     Status = 'status',
     Settings = 'settings',
 
@@ -21,4 +20,7 @@ export enum ControllersEnum {
     Books = 'books',
     Wallet = 'wallet',
     BorrowBooks = 'borrow-books',
+
+    Discussion = 'discussion',
+    Comment = 'comment',
 }

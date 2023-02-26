@@ -13,6 +13,7 @@ import { BooksModule } from './books/books.module';
 import { BorrowBookModule } from './borrow-book/borrow-book.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
+import { DiscussionModule } from './discussion/discussion.module';
 
 @Module({
     imports: [
@@ -41,6 +42,8 @@ import { WalletModule } from './wallet/wallet.module';
         WalletModule,
 
         BorrowBookModule,
+
+        DiscussionModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -26,7 +26,8 @@ export class UserInterestsService extends SerializableService<UserInterestsEntit
             $and: [{ tags: { $in: interestsFromPrevBooks }, isAvailable: true }, { _id: { $nin: alreadyReadBookIds } }],
         });
 
-        const bookPreviouslyRead: any = doc.booksRead[0];
+        const lastReadBookIndex = doc.booksRead.length;
+        const bookPreviouslyRead: any = doc.booksRead[lastReadBookIndex - 1];
 
         const prevBookTags = (bookPreviouslyRead as BookEntity).tags;
 

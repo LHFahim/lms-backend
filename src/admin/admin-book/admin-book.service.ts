@@ -2,6 +2,7 @@ import { SerializeService } from '@app/utils/serializer/serialize.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
+import { DiscussionService } from '../../discussion/services/discussion.service';
 
 import { UserEntity } from '../../user/entities/user.entity';
 
@@ -15,6 +16,7 @@ export class AdminBookService extends SerializeService<BookEntity> {
         @InjectModel(BookEntity) private readonly bookModel: ReturnModelType<typeof BookEntity>,
         @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
         private adminAuthService: AdminAuthService,
+        private readonly discussionService: DiscussionService,
     ) {
         super(BookEntity);
     }
@@ -30,6 +32,8 @@ export class AdminBookService extends SerializeService<BookEntity> {
             isDeleted: false,
             addedBy: userId,
         });
+
+        await this.discussionService.createDiscussion({ book: doc._id });
 
         return this.toJSON(doc, BookDto);
     }

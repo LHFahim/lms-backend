@@ -15,28 +15,35 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
     }
 
     async findBorrowedBooks(userId: string) {
-        const doc = await this.borrowBookModel.findOne({ borrower: userId, isReturned: false }).populate('bookId');
+        const docs = await this.borrowBookModel.find({ borrower: userId, isReturned: false }).populate('bookId');
 
-        const remainingDays = intervalToDuration({ start: doc.borrowedDate.toDate(), end: doc.returnDate.toDate() });
+        const borrowedData: any = [];
 
-        return this.toJSON(
-            {
-                book: doc.bookId,
-                borrowedDate: doc.borrowedDate,
-                returnDate: doc.returnDate,
+        docs.forEach((book) => {
+            const remainingDays = intervalToDuration({
+                start: new Date(),
+                end: book.returnDate.toDate(),
+            });
+
+            const obj = {
+                book: book.bookId,
                 remainingDays,
-                isReturned: doc.isReturned,
-            },
-            BorrowBookDto,
-        );
+            };
+
+            borrowedData.push(obj);
+        });
+
+        // console.log(borrowedData);
+
+        return this.toJSON(borrowedData, BorrowBookDto);
     }
 
     async addBorrowedBookDetails(userId: string, bookId: string) {
         const doc = await this.borrowBookModel.create({
             bookId,
             borrower: userId,
-            borrowedDate: new Date().toDateString(),
-            returnDate: add(new Date(), { days: 15 }).toDateString(),
+            borrowedDate: new Date().toISOString(),
+            returnDate: add(new Date(), { days: 15 }).toISOString(),
             isReturned: false,
         });
     }

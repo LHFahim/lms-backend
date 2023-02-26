@@ -89,6 +89,9 @@ export class BooksService extends SerializableService<BookEntity> {
     }
 
     async findSearchedBooks(userId: string, query: BookQueryDto) {
+        console.log('hit search function');
+        console.log('🚀 ~ file: books.service.ts:92 ~ BooksService ~ findSearchedBooks ~ query:', query);
+
         const { key } = query;
 
         const docs = await this.bookModel.find({

@@ -55,6 +55,7 @@ export const Routes = {
         updateNotificationSettings: 'notifications',
     },
     [ControllersEnum.Books]: {
+        findSearchedBooks: '/search',
         findBooks: '',
         findOneBook: ':id',
         borrowOneBook: ':id/borrow',

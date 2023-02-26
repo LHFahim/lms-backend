@@ -8,7 +8,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import { UserInterestsService } from '../user/services/user-interests.service';
 import { WalletService } from '../wallet/wallet.service';
 import { BorrowBookService } from './../borrow-book/borrow-book.service';
-import { FilteredBooksDto } from './dto/book.dto';
+import { BookQueryDto, FilteredBooksDto } from './dto/book.dto';
 
 @Injectable()
 export class BooksService extends SerializableService<BookEntity> {
@@ -85,6 +85,25 @@ export class BooksService extends SerializableService<BookEntity> {
     async findFilteredBooks(userId: string, body: FilteredBooksDto) {
         const docs = await this.bookModel.find({ tags: { $all: body.tags } });
 
+        return this.toJSON(docs, BookDto);
+    }
+
+    async findSearchedBooks(userId: string, query: BookQueryDto) {
+        const { key } = query;
+
+        const docs = await this.bookModel.find({
+            $or: [
+                {
+                    title: { $regex: key, $options: 'i' },
+                },
+                {
+                    author: { $regex: key, $options: 'i' },
+                },
+                {
+                    description: { $regex: key, $options: 'i' },
+                },
+            ],
+        });
         return this.toJSON(docs, BookDto);
     }
 }

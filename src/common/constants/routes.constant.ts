@@ -44,7 +44,7 @@ export const Routes = {
 
     [ControllersEnum.Discussion]: {
         createDiscussion: '',
-        findOneDiscussion: ':bookId/:discussionId',
+        findOneDiscussion: ':bookId',
 
         updateDiscussion: ':id',
         deleteDiscussion: ':id',
@@ -75,8 +75,9 @@ export const Routes = {
         findUserInterests: '',
     },
     [ControllersEnum.Comment]: {
-        createComment: ':discussionId',
+        createComment: ':bookId/:discussionId',
         findComments: ':discussionId',
+        deleteComment: ':discussionId/:id',
     },
 
     // admin routes below

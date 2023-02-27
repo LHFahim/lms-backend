@@ -6,6 +6,8 @@ import { DiscussionService } from '../../discussion/services/discussion.service'
 
 import { UserEntity } from '../../user/entities/user.entity';
 
+import { Types } from 'mongoose';
+import { DiscussionEntity } from '../../discussion/entities/discussion.entity';
 import { AdminAuthService } from '../admin-auth/auth.service';
 import { BookDto, CreateAdminBookDto, RestockAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
 import { BookEntity } from './entities/admin-book.entity';
@@ -15,6 +17,7 @@ export class AdminBookService extends SerializeService<BookEntity> {
     constructor(
         @InjectModel(BookEntity) private readonly bookModel: ReturnModelType<typeof BookEntity>,
         @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
+        @InjectModel(DiscussionEntity) private readonly discussionModel: ReturnModelType<typeof DiscussionEntity>,
         private adminAuthService: AdminAuthService,
         private readonly discussionService: DiscussionService,
     ) {
@@ -24,21 +27,27 @@ export class AdminBookService extends SerializeService<BookEntity> {
     async addBook(userId: string, body: CreateAdminBookDto) {
         if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
 
+        const disDoc = await this.discussionModel.create({ book: new Types.ObjectId().toString(), comments: [] });
+
         const doc = await this.bookModel.create({
             ...body,
-
+            discussion: disDoc._id,
             borrowedBy: [],
             isAvailable: true,
             isDeleted: false,
             addedBy: userId,
         });
 
-        await this.discussionService.createDiscussion({ book: doc._id });
+        disDoc.book = doc._id;
+        await disDoc.save();
 
         return this.toJSON(doc, BookDto);
     }
 
     async findBooks(userId: string) {
+        const s = new Types.ObjectId();
+        console.log('this ==> ', s.toString());
+        console.log(s);
         if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
 
         const docs = await this.bookModel.find({ isAvailable: true, isDeleted: false });

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
-import { CreateDiscussionDto, DiscussionDto, UpdateDiscussionDto } from '../dto/discussion.dto';
+import { CreateDiscussionDto, DiscussionDto } from '../dto/discussion.dto';
 
 import { DiscussionEntity } from '../entities/discussion.entity';
 
@@ -23,8 +23,11 @@ export class DiscussionService extends SerializeService<DiscussionEntity> {
         return this.toJSON(doc, DiscussionDto);
     }
 
-    async findOneDiscussion(userId: string, book: string, _id: string) {
-        const doc = await (await this.discussionModel.findOne({ _id, book })).populate('comments');
+    async findOneDiscussion(userId: string, book: string) {
+        const doc = await (
+            await this.discussionModel.findOne({ book })
+        ).populate({ path: 'comments', populate: { path: 'madeBy' } });
+
         if (!doc) throw new NotFoundException('No discussion record found');
 
         return this.toJSON(doc, DiscussionDto);
@@ -38,17 +41,5 @@ export class DiscussionService extends SerializeService<DiscussionEntity> {
         );
 
         return this.toJSON(doc, DiscussionDto);
-    }
-
-    findOne(id: number) {
-        return `This action returns a #${id} discussion`;
-    }
-
-    update(id: number, updateDiscussionDto: UpdateDiscussionDto) {
-        return `This action updates a #${id} discussion`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} discussion`;
     }
 }

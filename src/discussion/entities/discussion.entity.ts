@@ -6,7 +6,7 @@ import { DocumentCTWithTimeStamps, Model } from '../../../libs/utils/src';
 import { BookEntity } from '../../admin/admin-book/entities/admin-book.entity';
 import { CommentEntity } from './comment.entity';
 
-@Model('disucssions', true)
+@Model('discussions', true)
 export class DiscussionEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsMongoId()

@@ -4,6 +4,7 @@ import { Expose, Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Model } from '../../../../libs/utils/src';
 import { BookTagsEnum, CurrencyEnum } from '../../../common/enums/lms.enum';
+import { DiscussionEntity } from '../../../discussion/entities/discussion.entity';
 import { UserEntity } from '../../../user/entities/user.entity';
 
 import { DocumentCTWithTimeStamps } from './../../../../libs/utils/src/serializer/defaultClasses';
@@ -80,6 +81,13 @@ export class BookEntity extends DocumentCTWithTimeStamps {
     @Prop({ required: true, default: [] })
     @IsMongoId({ each: true })
     borrowedBy: Ref<UserEntity>[];
+
+    @Expose()
+    @IsMongoId()
+    @IsNotEmpty()
+    @Type(() => DiscussionEntity)
+    @Prop({ required: true, ref: () => DiscussionEntity })
+    discussion: Ref<DiscussionEntity>;
 
     @Expose()
     @IsBoolean()

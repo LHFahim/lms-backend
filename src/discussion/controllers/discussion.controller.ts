@@ -21,12 +21,8 @@ export class DiscussionController {
     }
 
     @Get(Routes[ControllersEnum.Discussion].findOneDiscussion)
-    findOneDiscussion(
-        @UserId() userId: string,
-        @ResourceId('bookId') bookId: string,
-        @ResourceId('discussionId') discussionId: string,
-    ) {
-        return this.discussionService.findOneDiscussion(userId, bookId, discussionId);
+    findOneDiscussion(@UserId() userId: string, @ResourceId('bookId') bookId: string) {
+        return this.discussionService.findOneDiscussion(userId, bookId);
     }
 
     // @Get(':id')

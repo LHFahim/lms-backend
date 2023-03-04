@@ -131,4 +131,8 @@ export const Routes = {
         updateWallet: ':id',
         fineWallet: ':id',
     },
+    [ControllersEnum.AdminBorrowBooks]: {
+        findAllBorrowedBooks: '',
+        acceptReturnBook: ':bookId/:borrowerId/accept',
+    },
 };

@@ -6,6 +6,7 @@ export enum ControllersEnum {
     AdminAuth = 'admin-auth',
     AdminBooks = 'admin-books',
     AdminWallet = 'admin-wallet',
+    AdminBorrowBooks = 'admin-borrow-books',
 
     Auth = 'auth',
     Roles = 'roles',

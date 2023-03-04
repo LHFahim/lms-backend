@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
@@ -37,7 +37,9 @@ export class CommentService extends SerializeService<CommentEntity> {
     }
 
     async deleteComment(userId: string, discussion: string, _id: string) {
-        const doc = await this.commentModel.findOneAndDelete({ _id, discussion });
+        const doc = await this.commentModel.findOneAndDelete({ _id, discussion, madeBy: userId });
+        console.log('🚀 ~ file: comment.service.ts:41 ~ CommentService ~ deleteComment ~ doc:', doc);
+        if (!doc) throw new BadRequestException('This request cannot be completed');
 
         const disDoc = await this.discussionModel.findOneAndUpdate(
             { discussion },

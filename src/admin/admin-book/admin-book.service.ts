@@ -37,6 +37,7 @@ export class AdminBookService extends SerializeService<BookEntity> {
             isDeleted: false,
             addedBy: userId,
         });
+        console.log('🚀 ~ file: admin-book.service.ts:42 ~ AdminBookService ~ addBook ~ doc:', doc);
 
         disDoc.book = doc._id;
         await disDoc.save();

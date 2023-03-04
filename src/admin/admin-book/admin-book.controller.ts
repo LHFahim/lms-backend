@@ -19,6 +19,7 @@ export class AdminBookController {
 
     @Post(Routes[ControllersEnum.AdminBooks].addBook)
     addBook(@UserId() userId: string, @Body() body: CreateAdminBookDto) {
+        console.log('hit addBook()');
         return this.adminBookService.addBook(userId, body);
     }
 

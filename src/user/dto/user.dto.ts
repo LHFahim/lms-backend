@@ -15,6 +15,7 @@ export class UserDto extends PickType(UserEntity, [
     'shortBio',
     'phoneNumber',
     'walletId',
+    'panelType',
 ]) {}
 
 export class UserProfileDto {

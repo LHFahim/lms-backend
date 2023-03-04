@@ -9,6 +9,8 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { TodoModule } from './todo/todo.module';
 
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ScheduleModule } from '@nestjs/schedule';
 import { BooksModule } from './books/books.module';
 import { BorrowBookModule } from './borrow-book/borrow-book.module';
 import { DiscussionModule } from './discussion/discussion.module';
@@ -31,6 +33,19 @@ import { WalletModule } from './wallet/wallet.module';
             }),
             inject: [ConfigService],
         }),
+
+        ScheduleModule.forRoot(),
+
+        MailerModule.forRoot({
+            transport: {
+                host: 'smtp.sendgrid.net',
+                auth: {
+                    user: 'apikey',
+                    pass: process.env.SEND_GRID_PASSWORD,
+                },
+            },
+        }),
+
         AuthModule,
         UserModule,
         AdminModule,

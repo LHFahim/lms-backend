@@ -39,7 +39,6 @@ export class BooksService extends SerializableService<BookEntity> {
             isDeleted: false,
             quantity: { $gt: 0 },
         });
-
         if (!existingDoc) throw new NotFoundException('Book was not found');
 
         let flag = false;
@@ -89,9 +88,6 @@ export class BooksService extends SerializableService<BookEntity> {
     }
 
     async findSearchedBooks(userId: string, query: BookQueryDto) {
-        console.log('hit search function');
-        console.log('🚀 ~ file: books.service.ts:92 ~ BooksService ~ findSearchedBooks ~ query:', query);
-
         const { key } = query;
 
         const docs = await this.bookModel.find({

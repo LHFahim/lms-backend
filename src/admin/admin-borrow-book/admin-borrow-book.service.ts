@@ -48,6 +48,7 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
             {
                 bookId,
                 borrower: borrowerId,
+                isReturned: false,
             },
             { isReturned: true },
             { new: true },

@@ -33,8 +33,6 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
             borrowedData.push(obj);
         });
 
-        // console.log(borrowedData);
-
         return this.toJSON(borrowedData, BorrowBookDto);
     }
 

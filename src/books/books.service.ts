@@ -1,6 +1,4 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { BookDto } from '../admin/admin-book/dto/admin-book.dto';
@@ -20,7 +18,6 @@ export class BooksService extends SerializableService<BookEntity> {
         private readonly borrowBookService: BorrowBookService,
         private readonly walletService: WalletService,
         private readonly interestService: UserInterestsService,
-        private readonly mailService: MailerService,
     ) {
         super(BookEntity);
     }
@@ -107,18 +104,5 @@ export class BooksService extends SerializableService<BookEntity> {
             ],
         });
         return this.toJSON(docs, BookDto);
-    }
-
-    @Cron(CronExpression.EVERY_12_HOURS, {
-        name: 'Cron job from Book Service',
-    })
-    async handleCron() {
-        console.log('this is cron at every 10 seconds');
-        await this.mailService.sendMail({
-            // to: 'feri.fanni@gmail.com',
-            from: process.env.SEND_GRID_SENDER_EMAIL,
-            subject: 'This is automated cron mail',
-            text: 'Hey! If you get my message, it means I have successfully implemented CRON task scheduling along with Mail Service!',
-        });
     }
 }

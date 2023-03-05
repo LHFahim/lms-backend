@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { add, intervalToDuration } from 'date-fns';
 import { InjectModel } from 'nestjs-typegoose';
-import { SerializeService } from '../../libs/utils/src/serializer/serialize.service';
-import { BorrowBookDto } from './dto/borrow-book.dto';
-import { BorrowBookEntity } from './entities/borrow-book.entity';
+import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
+import { BorrowBookDto } from '../dto/borrow-book.dto';
+import { BorrowBookEntity } from '../entities/borrow-book.entity';
 
 @Injectable()
 export class BorrowBookService extends SerializeService<BorrowBookEntity> {

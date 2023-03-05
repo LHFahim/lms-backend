@@ -71,6 +71,10 @@ export const Routes = {
     [ControllersEnum.BorrowBooks]: {
         findBorrowedBooks: '',
     },
+    [ControllersEnum.BorrowRequestBooks]: {
+        requestToBorrow: ':bookId/request-to-borrow',
+        findAllBorrowedRequests: '',
+    },
     [ControllersEnum.UserInterests]: {
         findUserInterests: '',
     },
@@ -134,5 +138,6 @@ export const Routes = {
     [ControllersEnum.AdminBorrowBooks]: {
         findAllBorrowedBooks: '',
         acceptReturnBook: ':bookId/:borrowerId/accept',
+        approveRequest: ':bookId/:requesterId/approve',
     },
 };

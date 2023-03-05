@@ -28,4 +28,14 @@ export class AdminBorrowBookController {
         console.log(bookId, borrowerId);
         return this.adminBorrowBookService.acceptReturnBook(userId, bookId, borrowerId);
     }
+
+    @Patch(Routes[ControllersEnum.AdminBorrowBooks].approveRequest)
+    approveRequest(
+        @UserId() userId: string,
+        @ResourceId('bookId') bookId: string,
+        @ResourceId('requesterId') requesterId: string,
+    ) {
+        console.log(bookId, requesterId);
+        return this.adminBorrowBookService.approveRequest(userId, bookId, requesterId);
+    }
 }

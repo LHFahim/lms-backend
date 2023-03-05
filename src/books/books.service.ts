@@ -3,11 +3,11 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { BookDto } from '../admin/admin-book/dto/admin-book.dto';
 import { BookEntity } from '../admin/admin-book/entities/admin-book.entity';
+import { BorrowBookService } from '../borrow-book/services/borrow-book.service';
 import { SerializableService } from '../interfaces/serializable.class';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserInterestsService } from '../user/services/user-interests.service';
 import { WalletService } from '../wallet/wallet.service';
-import { BorrowBookService } from './../borrow-book/borrow-book.service';
 import { BookQueryDto, FilteredBooksDto } from './dto/book.dto';
 
 @Injectable()
@@ -106,3 +106,11 @@ export class BooksService extends SerializableService<BookEntity> {
         return this.toJSON(docs, BookDto);
     }
 }
+
+// TODO: book reservation
+// TODO: admin side - get all books with some query
+// TODO: user earns 5 points for each book donation,
+// TODO: with 10 points, he can keep the book for 4 weeks
+
+// TODO: a user can borrow maximum 3 books at once
+// TODO: with x points, user can borrow more than 3 books

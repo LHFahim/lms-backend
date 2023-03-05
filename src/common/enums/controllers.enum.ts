@@ -21,6 +21,7 @@ export enum ControllersEnum {
     Books = 'books',
     Wallet = 'wallet',
     BorrowBooks = 'borrow-books',
+    BorrowRequestBooks = 'borrow-request-books',
 
     Discussion = 'discussion',
     Comment = 'comment',

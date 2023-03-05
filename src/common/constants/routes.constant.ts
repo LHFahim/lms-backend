@@ -139,5 +139,6 @@ export const Routes = {
         findAllBorrowedBooks: '',
         acceptReturnBook: ':bookId/:borrowerId/accept',
         approveRequest: ':bookId/:requesterId/approve',
+        declineRequest: ':bookId/:requesterId/decline',
     },
 };

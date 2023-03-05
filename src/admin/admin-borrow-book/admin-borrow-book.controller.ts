@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize, UserId } from '../../../libs/utils/src';
 import { ResourceId } from '../../../libs/utils/src/request/validate-resource-ids.decorator';
@@ -25,7 +25,6 @@ export class AdminBorrowBookController {
         @ResourceId('bookId') bookId: string,
         @ResourceId('borrowerId') borrowerId: string,
     ) {
-        console.log(bookId, borrowerId);
         return this.adminBorrowBookService.acceptReturnBook(userId, bookId, borrowerId);
     }
 
@@ -35,7 +34,15 @@ export class AdminBorrowBookController {
         @ResourceId('bookId') bookId: string,
         @ResourceId('requesterId') requesterId: string,
     ) {
-        console.log(bookId, requesterId);
         return this.adminBorrowBookService.approveRequest(userId, bookId, requesterId);
+    }
+
+    @Delete(Routes[ControllersEnum.AdminBorrowBooks].declineRequest)
+    declineRequest(
+        @UserId() userId: string,
+        @ResourceId('bookId') bookId: string,
+        @ResourceId('requesterId') requesterId: string,
+    ) {
+        return this.adminBorrowBookService.declineRequest(userId, bookId, requesterId);
     }
 }

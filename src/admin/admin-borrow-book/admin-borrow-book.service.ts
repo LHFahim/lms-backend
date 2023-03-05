@@ -114,6 +114,19 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         return this.toJSON(doc, BookDto);
     }
 
+    async declineRequest(userId: string, bookId: string, requesterId: string) {
+        if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
+        const doc = await this.borrowRequestModel.findOneAndDelete({
+            book: bookId,
+            requester: requesterId,
+            isApproved: false,
+        });
+        if (!doc) throw new BadRequestException("Request couldn't be processed.");
+
+        return true;
+    }
+
     @Cron(CronExpression.EVERY_DAY_AT_10PM, {
         name: 'Cron job from Book Service',
     })

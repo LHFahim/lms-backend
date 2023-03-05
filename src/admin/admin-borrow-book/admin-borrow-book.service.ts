@@ -84,7 +84,7 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
                 to: userEmail,
                 from: process.env.SEND_GRID_SENDER_EMAIL,
                 subject: 'Delay of book return',
-                text: `Dear reader. ${'\n'}You failed to return the book titled ${borrowedBook} by ${author}. As a result, we have fined you xyz amount. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}Online Library Management System`,
+                text: `Dear reader. ${'\n'}You failed to return the book titled ${borrowedBook} by ${author}. As a result, we have fined you xyz amount. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
             });
         });
     }

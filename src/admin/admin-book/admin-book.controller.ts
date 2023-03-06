@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Routes } from 'src/common';
 import { Serialize, UserId } from '../../../libs/utils/src';
@@ -7,7 +7,7 @@ import { APIVersions, ControllersEnum } from '../../common';
 import { JwtAuthGuard } from '../admin-auth/guards/jwt-auth.guard';
 import { AdminBookService } from './admin-book.service';
 
-import { CreateAdminBookDto, RestockAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
+import { AdminBooksQueryDto, CreateAdminBookDto, RestockAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
 
 @ApiTags('Admin ===> Books')
 @Serialize()
@@ -24,8 +24,8 @@ export class AdminBookController {
     }
 
     @Get(Routes[ControllersEnum.AdminBooks].findBooks)
-    findBooks(@UserId() userId: string) {
-        return this.adminBookService.findBooks(userId);
+    findBooks(@UserId() userId: string, @Query() query: AdminBooksQueryDto) {
+        return this.adminBookService.findBooks(userId, query);
     }
 
     @Get(Routes[ControllersEnum.AdminBooks].findOneBook)

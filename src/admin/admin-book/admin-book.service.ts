@@ -9,7 +9,13 @@ import { UserEntity } from '../../user/entities/user.entity';
 import { Types } from 'mongoose';
 import { DiscussionEntity } from '../../discussion/entities/discussion.entity';
 import { AdminAuthService } from '../admin-auth/auth.service';
-import { BookDto, CreateAdminBookDto, RestockAdminBookDto, UpdateAdminBookDto } from './dto/admin-book.dto';
+import {
+    AdminBooksQueryDto,
+    BookDto,
+    CreateAdminBookDto,
+    RestockAdminBookDto,
+    UpdateAdminBookDto,
+} from './dto/admin-book.dto';
 import { BookEntity } from './entities/admin-book.entity';
 
 @Injectable()
@@ -45,16 +51,27 @@ export class AdminBookService extends SerializeService<BookEntity> {
         return this.toJSON(doc, BookDto);
     }
 
-    async findBooks(userId: string) {
-        const s = new Types.ObjectId();
-        console.log('this ==> ', s.toString());
-        console.log(s);
+    async findBooks(userId: string, query: AdminBooksQueryDto) {
         if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
 
-        const docs = await this.bookModel.find({ isAvailable: true, isDeleted: false });
+        const docs = await this.bookModel
+            .find({ isAvailable: true, isDeleted: false })
+            .sort({ [query.sortBy]: query.sort })
+            .limit(query.pageSize)
+            .skip((query.page - 1) * query.pageSize);
         if (!docs) throw new NotFoundException('No book is found');
 
-        return this.toJSONs(docs, BookDto);
+        const docsCount = await this.bookModel.count({ isAvailable: true, isDeleted: false });
+
+        return {
+            data: this.toJSONs(docs, BookDto),
+            pagination: {
+                total: docsCount,
+                current: query.page,
+                previous: query.page === 1 ? 1 : query.page - 1,
+                next: docs.length > query.page * query.pageSize ? query.page + 1 : query.page,
+            },
+        };
     }
 
     async findOne(userId: string, _id: string) {

@@ -107,8 +107,6 @@ export class BooksService extends SerializableService<BookEntity> {
     }
 }
 
-// TODO: book reservation
-// TODO: admin side - get all books with some query
 // TODO: user earns 5 points for each book donation,
 // TODO: with 10 points, he can keep the book for 4 weeks
 

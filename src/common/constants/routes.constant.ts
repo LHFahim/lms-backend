@@ -83,6 +83,9 @@ export const Routes = {
         findComments: ':discussionId',
         deleteComment: ':discussionId/:id',
     },
+    [ControllersEnum.WaitingList]: {
+        createWaitingList: ':bookId',
+    },
 
     // admin routes below
     [ControllersEnum.AdminStatus]: {

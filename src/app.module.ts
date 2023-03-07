@@ -16,6 +16,7 @@ import { BorrowBookModule } from './borrow-book/borrow-book.module';
 import { DiscussionModule } from './discussion/discussion.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
+import { WaitingListModule } from './waiting-list/waiting-list.module';
 
 @Module({
     imports: [
@@ -59,6 +60,8 @@ import { WalletModule } from './wallet/wallet.module';
         BorrowBookModule,
 
         DiscussionModule,
+
+        WaitingListModule,
     ],
     controllers: [AppController],
     providers: [AppService],

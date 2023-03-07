@@ -25,4 +25,5 @@ export enum ControllersEnum {
 
     Discussion = 'discussion',
     Comment = 'comment',
+    WaitingList = 'waiting-list',
 }

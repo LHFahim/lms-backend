@@ -86,6 +86,11 @@ export const Routes = {
     [ControllersEnum.WaitingList]: {
         createWaitingList: ':bookId',
     },
+    [ControllersEnum.DonateBook]: {
+        donateBook: 'donate',
+        findDonatedBooks: '',
+        addDonatedBookToSystem: ':id',
+    },
 
     // admin routes below
     [ControllersEnum.AdminStatus]: {

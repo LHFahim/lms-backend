@@ -17,6 +17,7 @@ import { DiscussionModule } from './discussion/discussion.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WaitingListModule } from './waiting-list/waiting-list.module';
+import { DonateBookModule } from './donate-book/donate-book.module';
 
 @Module({
     imports: [
@@ -62,6 +63,8 @@ import { WaitingListModule } from './waiting-list/waiting-list.module';
         DiscussionModule,
 
         WaitingListModule,
+
+        DonateBookModule,
     ],
     controllers: [AppController],
     providers: [AppService],

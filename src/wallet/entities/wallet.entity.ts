@@ -18,8 +18,8 @@ export class WalletEntity extends DocumentCTWithTimeStamps {
     @Expose()
     @IsEnum(CurrencyEnum)
     @IsNotEmpty()
-    @ApiProperty({ required: true, default: CurrencyEnum.BDT })
-    @Prop({ required: true, default: CurrencyEnum.BDT })
+    @ApiProperty({ required: true, default: CurrencyEnum.POINTS })
+    @Prop({ required: true, default: CurrencyEnum.POINTS })
     currency: CurrencyEnum;
 
     @Expose()

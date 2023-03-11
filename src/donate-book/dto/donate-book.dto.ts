@@ -1,5 +1,4 @@
 import { PartialType, PickType } from '@nestjs/swagger';
-import { IsMongoId, IsNotEmpty } from 'class-validator';
 import { DonateBookEntity } from '../entities/donate-book.entity';
 
 export class CreateDonateBookDto extends PickType(DonateBookEntity, [
@@ -10,11 +9,7 @@ export class CreateDonateBookDto extends PickType(DonateBookEntity, [
     'tags',
 ]) {}
 
-export class AddDonateBookDto extends CreateDonateBookDto {
-    @IsMongoId()
-    @IsNotEmpty()
-    id: string;
-}
+export class AddDonateBookDto extends CreateDonateBookDto {}
 
 export class UpdateDonateBookDto extends PartialType(CreateDonateBookDto) {}
 

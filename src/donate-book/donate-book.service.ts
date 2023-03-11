@@ -6,6 +6,7 @@ import { SerializeService } from '../../libs/utils/src/serializer/serialize.serv
 import { AdminBookService } from '../admin/admin-book/admin-book.service';
 import { BookDto } from '../admin/admin-book/dto/admin-book.dto';
 import { BookEntity } from '../admin/admin-book/entities/admin-book.entity';
+import { WalletEntity } from '../wallet/entities/wallet.entity';
 import { AddDonateBookDto, CreateDonateBookDto, DonateBookDto } from './dto/donate-book.dto';
 import { DonateBookEntity } from './entities/donate-book.entity';
 
@@ -13,6 +14,7 @@ import { DonateBookEntity } from './entities/donate-book.entity';
 export class DonateBookService extends SerializeService<DonateBookEntity> {
     constructor(
         @InjectModel(BookEntity) private readonly bookModel: ReturnModelType<typeof BookEntity>,
+        @InjectModel(WalletEntity) private readonly walletModel: ReturnModelType<typeof WalletEntity>,
         @InjectModel(DonateBookEntity) private readonly donateModel: ReturnModelType<typeof DonateBookEntity>,
         private readonly bookService: AdminBookService,
     ) {
@@ -38,6 +40,12 @@ export class DonateBookService extends SerializeService<DonateBookEntity> {
         const donateDoc = await this.donateModel.findOneAndUpdate(
             { _id: id, isAccepted: false },
             { isAccepted: true },
+            { new: true },
+        );
+
+        const wallet = await this.walletModel.findOneAndUpdate(
+            { owner: donateDoc.donatedBy },
+            { $inc: { balance: 5 } },
             { new: true },
         );
 

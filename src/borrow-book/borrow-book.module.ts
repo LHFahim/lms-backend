@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { WalletEntity } from '../wallet/entities/wallet.entity';
 import { BorrowBookController } from './controllers/borrow-book.controller';
 import { BorrowRequestController } from './controllers/borrow-request.controller';
 import { BorrowBookEntity } from './entities/borrow-book.entity';
@@ -8,7 +9,7 @@ import { BorrowBookService } from './services/borrow-book.service';
 import { BorrowRequestService } from './services/borrow-request.service';
 
 @Module({
-    imports: [TypegooseModule.forFeature([BorrowBookEntity, BorrowRequestEntity])],
+    imports: [TypegooseModule.forFeature([BorrowBookEntity, BorrowRequestEntity, WalletEntity])],
     controllers: [BorrowBookController, BorrowRequestController],
     providers: [BorrowBookService, BorrowRequestService],
 })

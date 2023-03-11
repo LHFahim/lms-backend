@@ -70,6 +70,7 @@ export const Routes = {
     },
     [ControllersEnum.BorrowBooks]: {
         findBorrowedBooks: '',
+        extendBorrowedBooksDuration: ':id/extend-duration',
     },
     [ControllersEnum.BorrowRequestBooks]: {
         requestToBorrow: ':bookId/request-to-borrow',

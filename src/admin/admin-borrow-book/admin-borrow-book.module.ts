@@ -6,6 +6,7 @@ import { BorrowBookService } from '../../borrow-book/services/borrow-book.servic
 import { UserInterestsEntity } from '../../user/entities/user-interests.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { UserInterestsService } from '../../user/services/user-interests.service';
+import { WalletEntity } from '../../wallet/entities/wallet.entity';
 import { AdminAuthService } from '../admin-auth/auth.service';
 import { OTPEntity } from '../admin-auth/entities/otp';
 import { BookEntity } from '../admin-book/entities/admin-book.entity';
@@ -21,6 +22,7 @@ import { AdminBorrowBookService } from './admin-borrow-book.service';
             BookEntity,
             UserInterestsEntity,
             BorrowRequestEntity,
+            WalletEntity,
         ]),
     ],
     controllers: [AdminBorrowBookController],

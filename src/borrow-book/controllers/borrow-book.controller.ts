@@ -1,6 +1,8 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Patch } from '@nestjs/common/decorators';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize } from '../../../libs/utils/src';
+import { ResourceId } from '../../../libs/utils/src/request/validate-resource-ids.decorator';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { APIVersions, ControllersEnum, Routes } from '../../common';
 import { UserId } from '../../common/decorators/user.decorator';
@@ -17,5 +19,10 @@ export class BorrowBookController {
     @Get(Routes[ControllersEnum.BorrowBooks].findBorrowedBooks)
     findBorrowedBooks(@UserId() userId: string) {
         return this.borrowBookService.findBorrowedBooks(userId);
+    }
+
+    @Patch(Routes[ControllersEnum.BorrowBooks].extendBorrowedBooksDuration)
+    extendBorrowedBooksDuration(@UserId() userId: string, @ResourceId() id: string) {
+        return this.borrowBookService.extendBorrowedBooksDuration(userId, id);
     }
 }

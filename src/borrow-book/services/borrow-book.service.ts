@@ -3,6 +3,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { add, intervalToDuration } from 'date-fns';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
+import { WalletEntity } from '../../wallet/entities/wallet.entity';
 import { BorrowBookDto } from '../dto/borrow-book.dto';
 import { BorrowBookEntity } from '../entities/borrow-book.entity';
 
@@ -10,6 +11,7 @@ import { BorrowBookEntity } from '../entities/borrow-book.entity';
 export class BorrowBookService extends SerializeService<BorrowBookEntity> {
     constructor(
         @InjectModel(BorrowBookEntity) private readonly borrowBookModel: ReturnModelType<typeof BorrowBookEntity>,
+        @InjectModel(WalletEntity) private readonly walletModel: ReturnModelType<typeof WalletEntity>,
     ) {
         super(BorrowBookEntity);
     }
@@ -28,6 +30,7 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
             const obj = {
                 book: book.bookId,
                 remainingDays,
+                borrowId: book.id,
             };
 
             borrowedData.push(obj);
@@ -55,5 +58,23 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
             { isReturned: true },
             { new: true },
         );
+    }
+
+    async extendBorrowedBooksDuration(userId: string, id: string) {
+        const doc = await this.borrowBookModel.findOne({ _id: id });
+
+        let rDate = new Date(doc.returnDate);
+        rDate = add(rDate, { weeks: 2 });
+
+        doc.returnDate = rDate.toISOString();
+        await doc.save();
+
+        const wallet = await this.walletModel.findOneAndUpdate(
+            { owner: userId },
+            { $inc: { balance: -10 } },
+            { new: true },
+        );
+
+        return this.toJSON(doc, BorrowBookDto);
     }
 }

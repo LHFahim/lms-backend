@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { BadRequestException } from '@nestjs/common/exceptions';
+import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { add, intervalToDuration } from 'date-fns';
 import { InjectModel } from 'nestjs-typegoose';
@@ -81,20 +81,22 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
         return this.toJSON(doc, BorrowBookDto);
     }
 
-    async extendBorrowedBooksLimit(userId: string) {
-        const wallet = await this.walletModel.findOne({ owner: userId, balance: { $gt: 50 } });
-        if (!wallet) throw new NotFoundException("You don't have sufficient balance!");
+    @Cron(CronExpression.EVERY_DAY_AT_2AM, {
+        name: 'Cron job from Borrow Book Service',
+    })
+    async extendBorrowedBooksLimit() {
+        const wallets = await this.walletModel.find({ balance: { $gt: 50 } });
 
-        const user = await this.userModel.findOneAndUpdate(
-            { _id: userId, borrowLimit: 3 },
-            { $set: { borrowLimit: 5 } },
-            { new: true },
-        );
+        wallets.forEach(async (wallet) => {
+            const user = await this.userModel.findOneAndUpdate(
+                { _id: wallet.owner, borrowLimit: 3 },
+                { $set: { borrowLimit: 5 } },
+                { new: true },
+            );
 
-        if (!user) throw new BadRequestException('Borrow limit is already 5');
-
-        wallet.balance -= 50;
-        await wallet.save();
+            wallet.balance -= 50;
+            await wallet.save();
+        });
 
         return true;
     }

@@ -13,7 +13,7 @@ TODO: with x points, user can borrow more than 3 books
 11th March, 2023
 TODO: show user his donated books - done
 TODO: show the returned books for the user in borrowed book page - done
-TODO: automatically extend borrow book limit when balance reaches 50
+TODO: automatically extend borrow book limit when balance reaches 50 -done
 TODO: email user to return book when deadline is near
 TODO: allow book modifications by admin
 TODO: books can be deleted by admin

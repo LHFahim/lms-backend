@@ -31,8 +31,10 @@ export class BorrowBookController {
         return this.borrowBookService.extendBorrowedBooksDuration(userId, id);
     }
 
+    // i have made this route automated using crone,
+    // currently this endpoint is useless
     @Patch(Routes[ControllersEnum.BorrowBooks].extendBorrowedBooksLimit)
     extendBorrowedBooksLimit(@UserId() userId: string) {
-        return this.borrowBookService.extendBorrowedBooksLimit(userId);
+        return this.borrowBookService.extendBorrowedBooksLimit();
     }
 }

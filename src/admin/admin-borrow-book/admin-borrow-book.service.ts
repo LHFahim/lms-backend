@@ -127,7 +127,7 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         return true;
     }
 
-    @Cron(CronExpression.EVERY_DAY_AT_10PM, {
+    @Cron(CronExpression.EVERY_DAY_AT_2AM, {
         name: 'Cron job from Book Service',
     })
     async handleBorrowBookCron() {

@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common/exceptions';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { add, intervalToDuration } from 'date-fns';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
+import { UserEntity } from '../../user/entities/user.entity';
 import { WalletEntity } from '../../wallet/entities/wallet.entity';
-import { BorrowBookDto } from '../dto/borrow-book.dto';
+import { BorrowBookDto, ReturnedBookDto } from '../dto/borrow-book.dto';
 import { BorrowBookEntity } from '../entities/borrow-book.entity';
 
 @Injectable()
@@ -12,6 +14,7 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
     constructor(
         @InjectModel(BorrowBookEntity) private readonly borrowBookModel: ReturnModelType<typeof BorrowBookEntity>,
         @InjectModel(WalletEntity) private readonly walletModel: ReturnModelType<typeof WalletEntity>,
+        @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
     ) {
         super(BorrowBookEntity);
     }
@@ -76,5 +79,29 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
         );
 
         return this.toJSON(doc, BorrowBookDto);
+    }
+
+    async extendBorrowedBooksLimit(userId: string) {
+        const wallet = await this.walletModel.findOne({ owner: userId, balance: { $gt: 50 } });
+        if (!wallet) throw new NotFoundException("You don't have sufficient balance!");
+
+        const user = await this.userModel.findOneAndUpdate(
+            { _id: userId, borrowLimit: 3 },
+            { $set: { borrowLimit: 5 } },
+            { new: true },
+        );
+
+        if (!user) throw new BadRequestException('Borrow limit is already 5');
+
+        wallet.balance -= 50;
+        await wallet.save();
+
+        return true;
+    }
+
+    async findReturnedBooks(userId: string) {
+        const docs = await this.borrowBookModel.find({ borrower: userId, isReturned: true }).populate('bookId');
+
+        return this.toJSON(docs, ReturnedBookDto);
     }
 }

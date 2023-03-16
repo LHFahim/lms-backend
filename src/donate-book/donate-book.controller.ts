@@ -26,6 +26,11 @@ export class DonateBookController {
         return this.donateBookService.findDonatedBooks();
     }
 
+    @Get(Routes[ControllersEnum.DonateBook].findUserDonatedBooks)
+    findUserDonatedBooks(@UserId() userId: string) {
+        return this.donateBookService.findUserDonatedBooks(userId);
+    }
+
     @Post(Routes[ControllersEnum.DonateBook].addDonatedBookToSystem)
     addDonatedBookToSystem(@UserId() userId: string, @ResourceId('id') id: string, @Body() body: AddDonateBookDto) {
         return this.donateBookService.addDonatedBookToSystem(userId, id, body);

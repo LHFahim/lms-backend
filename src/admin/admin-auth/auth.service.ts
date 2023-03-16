@@ -50,7 +50,7 @@ export class AdminAuthService extends SerializableService<UserEntity> {
         const newUser = await this.userService.create({
             ...dto,
             avatarURL: dto.avatarURL || '',
-
+            borrowLimit: 3,
             panelType: PanelType.ADMIN,
             isActive: true,
             isDeleted: false,

@@ -51,4 +51,10 @@ export class DonateBookService extends SerializeService<DonateBookEntity> {
 
         return this.toJSON(doc, BookDto);
     }
+
+    async findUserDonatedBooks(userId: string) {
+        const docs = await this.donateModel.find({ donatedBy: userId });
+
+        return this.toJSON(docs, BookDto);
+    }
 }

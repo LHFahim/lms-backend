@@ -106,9 +106,3 @@ export class BooksService extends SerializableService<BookEntity> {
         return this.toJSON(docs, BookDto);
     }
 }
-
-// TODO: user earns 5 points for each book donation,
-// TODO: with 10 points, he can keep the book for 4 weeks
-
-// TODO: a user can borrow maximum 3 books at once
-// TODO: with x points, user can borrow more than 3 books

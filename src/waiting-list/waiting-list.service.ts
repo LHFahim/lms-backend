@@ -29,7 +29,7 @@ export class WaitingListService extends SerializeService<WaitingListEntity> {
         return this.toJSON(doc, WaitingListDto);
     }
 
-    @Cron(CronExpression.EVERY_DAY_AT_10AM, {
+    @Cron(CronExpression.EVERY_10_HOURS, {
         name: 'Cron job from Book Service',
     })
     async handleBorrowBookCron() {
@@ -51,6 +51,7 @@ export class WaitingListService extends SerializeService<WaitingListEntity> {
 
             const res = await this.mailService.sendMail({
                 to: userEmail,
+                // to: 'wangnana_5@aliyun.com',
                 from: process.env.SEND_GRID_SENDER_EMAIL,
                 subject: 'Book availability',
                 text: `Dear reader. ${'\n'}You joined waiting list for the book titled ${title} by ${author}. The book has become available. Please come to the library as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,

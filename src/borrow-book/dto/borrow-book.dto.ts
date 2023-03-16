@@ -29,3 +29,21 @@ export class BorrowBookDto extends PickType(BorrowBookEntity, ['borrowedDate', '
     @ApiProperty({ required: true, minimum: 0 })
     remainingDays: number;
 }
+
+export class ReturnedBookDto extends BorrowBookEntity {
+    // @Expose()
+    // @IsMongoId()
+    // borrowId: mongoose.Types.ObjectId;
+    // @Expose()
+    // @IsMongoId()
+    // @IsNotEmpty()
+    // @Type(() => BookEntity)
+    // @ApiProperty({ required: true })
+    // @Prop({ required: true, ref: () => BookEntity })
+    // book: Ref<BookEntity>;
+    // @Expose()
+    // @IsNumber()
+    // @IsNotEmpty()
+    // @ApiProperty({ required: true, minimum: 0 })
+    // remainingDays: number;
+}

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
+import { UserEntity } from '../../user/entities/user.entity';
 import { BorrowRequestDto } from '../dto/borrow-request.dto';
 import { BorrowBookEntity } from '../entities/borrow-book.entity';
 import { BorrowRequestEntity } from '../entities/borrow-request.entity';
@@ -13,22 +14,25 @@ export class BorrowRequestService extends SerializeService<BorrowRequestEntity> 
         private readonly borrowRequestModel: ReturnModelType<typeof BorrowRequestEntity>,
         @InjectModel(BorrowBookEntity)
         private readonly borrowBookModel: ReturnModelType<typeof BorrowBookEntity>,
+        @InjectModel(UserEntity)
+        private readonly userModel: ReturnModelType<typeof UserEntity>,
     ) {
         super(BorrowRequestEntity);
     }
 
     async requestToBorrow(userId: string, book: string) {
         const flag = await this.borrowRequestModel.findOne({ book, requester: userId, isDeleted: false });
-        if (flag) throw new BadRequestException('This reqquest cannot be completed.');
+        if (flag) throw new BadRequestException('This request cannot be completed.');
+
+        const user = await this.userModel.findOne({ _id: userId });
 
         const borrowedBooksCount = await this.borrowBookModel.count({
             borrower: userId,
             isReturned: false,
         });
 
-        console.log(borrowedBooksCount);
-
-        if (borrowedBooksCount === 3) throw new BadRequestException('You have borrowed three books already!');
+        if (borrowedBooksCount === user.borrowLimit)
+            throw new BadRequestException('You have borrowed three books already!');
 
         const doc = await this.borrowRequestModel.create({
             book,

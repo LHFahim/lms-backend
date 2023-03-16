@@ -70,7 +70,9 @@ export const Routes = {
     },
     [ControllersEnum.BorrowBooks]: {
         findBorrowedBooks: '',
+        findReturnedBooks: 'returned-books',
         extendBorrowedBooksDuration: ':id/extend-duration',
+        extendBorrowedBooksLimit: 'extend-limit',
     },
     [ControllersEnum.BorrowRequestBooks]: {
         requestToBorrow: ':bookId/request-to-borrow',
@@ -90,6 +92,7 @@ export const Routes = {
     [ControllersEnum.DonateBook]: {
         donateBook: 'donate',
         findDonatedBooks: '',
+        findUserDonatedBooks: 'user-donated',
         addDonatedBookToSystem: ':id',
     },
 

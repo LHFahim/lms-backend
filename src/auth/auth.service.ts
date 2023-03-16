@@ -48,7 +48,7 @@ export class AuthService extends SerializableService<UserEntity> {
         const newUser = await this.userService.create({
             ...dto,
             avatarURL: dto.avatarURL || '',
-
+            borrowLimit: 3,
             panelType: PanelType.CLIENT,
             isActive: true,
             isDeleted: false,

@@ -21,8 +21,18 @@ export class BorrowBookController {
         return this.borrowBookService.findBorrowedBooks(userId);
     }
 
+    @Get(Routes[ControllersEnum.BorrowBooks].findReturnedBooks)
+    findReturnedBooks(@UserId() userId: string) {
+        return this.borrowBookService.findReturnedBooks(userId);
+    }
+
     @Patch(Routes[ControllersEnum.BorrowBooks].extendBorrowedBooksDuration)
     extendBorrowedBooksDuration(@UserId() userId: string, @ResourceId() id: string) {
         return this.borrowBookService.extendBorrowedBooksDuration(userId, id);
+    }
+
+    @Patch(Routes[ControllersEnum.BorrowBooks].extendBorrowedBooksLimit)
+    extendBorrowedBooksLimit(@UserId() userId: string) {
+        return this.borrowBookService.extendBorrowedBooksLimit(userId);
     }
 }

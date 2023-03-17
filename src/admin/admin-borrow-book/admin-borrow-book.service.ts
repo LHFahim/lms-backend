@@ -2,15 +2,18 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { differenceInDays } from 'date-fns';
+
 import { InjectModel } from 'nestjs-typegoose';
 import { BorrowBookEntity } from '../../borrow-book/entities/borrow-book.entity';
 import { BorrowRequestEntity } from '../../borrow-book/entities/borrow-request.entity';
 import { BorrowBookService } from '../../borrow-book/services/borrow-book.service';
 import { SerializableService } from '../../interfaces/serializable.class';
-import { UserEntity } from '../../user/entities/user.entity';
 import { UserInterestsService } from '../../user/services/user-interests.service';
+import { WalletEntity } from '../../wallet/entities/wallet.entity';
 import { AdminAuthService } from '../admin-auth/auth.service';
 import { BookDto } from '../admin-book/dto/admin-book.dto';
+import { UserEntity } from './../../user/entities/user.entity';
 import { BookEntity } from './../admin-book/entities/admin-book.entity';
 import { AdminBorrowBookDto } from './dto/admin-borrow-book.dto';
 
@@ -19,6 +22,8 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
     constructor(
         @InjectModel(BorrowBookEntity) private readonly borrowBookModel: ReturnModelType<typeof BorrowBookEntity>,
         @InjectModel(BookEntity) private readonly bookModel: ReturnModelType<typeof BookEntity>,
+        @InjectModel(UserEntity) private readonly userModel: ReturnModelType<typeof UserEntity>,
+        @InjectModel(WalletEntity) private readonly walletModel: ReturnModelType<typeof WalletEntity>,
         @InjectModel(BorrowRequestEntity)
         private readonly borrowRequestModel: ReturnModelType<typeof BorrowRequestEntity>,
         private readonly adminAuthService: AdminAuthService,
@@ -127,11 +132,39 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         return true;
     }
 
-    @Cron(CronExpression.EVERY_DAY_AT_2AM, {
-        name: 'Cron job from Book Service',
-    })
+    @Cron(CronExpression.EVERY_DAY_AT_2AM)
+    async handleDeadlineWarningCron() {
+        console.log('handleDeadlineWarningCron() has been called');
+
+        const docs = await this.borrowBookModel
+            .find({
+                $and: [{ isReturned: false }, { returnDate: { $lt: new Date().toDateString() } }],
+            })
+            .populate('borrower')
+            .populate('bookId');
+
+        docs.forEach(async (doc) => {
+            const rDate = doc.returnDate.toDate();
+
+            const difference = differenceInDays(rDate, new Date());
+
+            if (difference <= 3) {
+                const { email } = doc.borrower as UserEntity;
+                const { author, title } = doc.bookId as BookEntity;
+
+                await this.mailService.sendMail({
+                    to: email,
+                    from: process.env.SEND_GRID_SENDER_EMAIL,
+                    subject: 'Borrow deadline',
+                    text: `Dear reader. ${'\n'}You have borrowed the book titled ${title} by ${author}. The return date is due soon. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
+                });
+            }
+        });
+    }
+
+    @Cron(CronExpression.EVERY_DAY_AT_2AM)
     async handleBorrowBookCron() {
-        console.log('this is cron at every 10 seconds');
+        console.log('handleBorrowBookCron() has been called');
 
         const docs = await this.borrowBookModel
             .find({
@@ -148,12 +181,30 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
             const borrowedBook = (bookId as BookEntity).title;
             const author = (bookId as BookEntity).author;
 
-            // const res = await this.mailService.sendMail({
-            //     to: userEmail,
-            //     from: process.env.SEND_GRID_SENDER_EMAIL,
-            //     subject: 'Delay of book return',
-            //     text: `Dear reader. ${'\n'}You failed to return the book titled ${borrowedBook} by ${author}. As a result, we have fined you xyz amount. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
-            // });
+            const res = await this.mailService.sendMail({
+                to: userEmail,
+                from: process.env.SEND_GRID_SENDER_EMAIL,
+                subject: 'Delay of book return',
+                text: `Dear reader. ${'\n'}You failed to return the book titled ${borrowedBook} by ${author}. As a result, we have fined you xyz amount. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
+            });
         });
+    }
+
+    @Cron(CronExpression.EVERY_DAY_AT_2AM)
+    async extendBorrowedBooksLimitCron() {
+        const wallets = await this.walletModel.find({ balance: { $gt: 50 } });
+
+        wallets.forEach(async (wallet) => {
+            const user = await this.userModel.findOneAndUpdate(
+                { _id: wallet.owner, borrowLimit: 3 },
+                { $set: { borrowLimit: 5 } },
+                { new: true },
+            );
+
+            wallet.balance -= 50;
+            await wallet.save();
+        });
+
+        return true;
     }
 }

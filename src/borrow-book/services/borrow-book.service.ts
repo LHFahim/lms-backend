@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { add, intervalToDuration } from 'date-fns';
 import { InjectModel } from 'nestjs-typegoose';
@@ -81,9 +80,6 @@ export class BorrowBookService extends SerializeService<BorrowBookEntity> {
         return this.toJSON(doc, BorrowBookDto);
     }
 
-    @Cron(CronExpression.EVERY_DAY_AT_2AM, {
-        name: 'Cron job from Borrow Book Service',
-    })
     async extendBorrowedBooksLimit() {
         const wallets = await this.walletModel.find({ balance: { $gt: 50 } });
 

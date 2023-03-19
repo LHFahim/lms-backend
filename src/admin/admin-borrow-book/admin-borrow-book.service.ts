@@ -148,7 +148,7 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
 
             const difference = differenceInDays(rDate, new Date());
 
-            if (difference <= 3) {
+            if (difference <= 5) {
                 const { email } = doc.borrower as UserEntity;
                 const { author, title } = doc.bookId as BookEntity;
 
@@ -185,7 +185,7 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
                 to: userEmail,
                 from: process.env.SEND_GRID_SENDER_EMAIL,
                 subject: 'Delay of book return',
-                text: `Dear reader. ${'\n'}You failed to return the book titled ${borrowedBook} by ${author}. As a result, we have fined you xyz amount. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
+                text: `Dear reader. ${'\n'}${'\n'}You failed to return the book titled ${borrowedBook} by ${author}. As a result, we have fined you xyz amount. Please return the book as soon as possible. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
             });
         });
     }

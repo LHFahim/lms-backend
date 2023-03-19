@@ -14,9 +14,16 @@ TODO: with x points, user can borrow more than 3 books
 TODO: show user his donated books - done
 TODO: show the returned books for the user in borrowed book page - done
 TODO: automatically extend borrow book limit when balance reaches 50 -done
-TODO: email user to return book when deadline is near
-TODO: allow book modifications by admin
-TODO: books can be deleted by admin
+TODO: email user to return book when deadline is near - done
+TODO: allow book modifications by admin - done
+TODO: books can be deleted by admin - done
 
-TODO: force user to change password
+TODO: user to change password - done
+*/
+
+/*
+17th March, 2023
+TODO: show admin all the borrowed books - by user
+TODO: admin - user management to show all borrowed, donated, returned books
+TODO: admin to see all the borrowed, and donated books
 */

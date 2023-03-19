@@ -92,6 +92,7 @@ export const Routes = {
     [ControllersEnum.DonateBook]: {
         donateBook: 'donate',
         findDonatedBooks: '',
+        findDonatedBooksList: 'list',
         findUserDonatedBooks: 'user-donated',
         addDonatedBookToSystem: ':id',
     },

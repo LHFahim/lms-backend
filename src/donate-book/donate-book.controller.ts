@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize, UserId } from '../../libs/utils/src';
 import { ResourceId } from '../../libs/utils/src/request/validate-resource-ids.decorator';
@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { APIVersions, ControllersEnum } from '../common';
 import { Routes } from './../common/constants/routes.constant';
 import { DonateBookService } from './donate-book.service';
-import { AddDonateBookDto } from './dto/donate-book.dto';
+import { AddDonateBookDto, AdminDonatedBooksQueryDto } from './dto/donate-book.dto';
 
 @ApiTags('Donate Book')
 @Serialize()
@@ -24,6 +24,11 @@ export class DonateBookController {
     @Get(Routes[ControllersEnum.DonateBook].findDonatedBooks)
     findDonatedBooks(@UserId() userId: string) {
         return this.donateBookService.findDonatedBooks();
+    }
+
+    @Get(Routes[ControllersEnum.DonateBook].findDonatedBooksList)
+    findDonatedBooksList(@UserId() userId: string, @Query() query: AdminDonatedBooksQueryDto) {
+        return this.donateBookService.findDonatedBooksList(userId, query);
     }
 
     @Get(Routes[ControllersEnum.DonateBook].findUserDonatedBooks)

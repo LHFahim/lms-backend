@@ -9,7 +9,6 @@ export class RegisterDto extends PickType(UserEntity, [
     'shortBio',
     'phoneNumber',
     'avatarURL',
-    'borrowLimit',
 ]) {
     @ApiProperty({ required: true })
     @IsString()

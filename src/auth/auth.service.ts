@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
 import * as bcrypt from 'bcrypt';
@@ -29,6 +30,7 @@ export class AuthService extends SerializableService<UserEntity> {
         private userService: UserService,
         @InjectModel(OTPEntity)
         private readonly otpModel: ReturnModelType<typeof OTPEntity>,
+        private readonly mailService: MailerService,
     ) {
         super(UserEntity);
     }
@@ -44,6 +46,7 @@ export class AuthService extends SerializableService<UserEntity> {
         if (user) throw new ConflictException('User already exists with this email');
 
         if (dto.password) dto.password = await this.getHashedPassword(dto.password);
+        console.log(dto);
 
         const newUser = await this.userService.create({
             ...dto,
@@ -135,12 +138,14 @@ export class AuthService extends SerializableService<UserEntity> {
 
         const user = await this.userService.findByEmail(dto.email);
         if (!user) throw new NotFoundException('User not found');
+
         if (user.authProvider !== AuthProvider.EMAIL)
             throw new BadRequestException('Reset password only works with email registration');
 
         const otp = await this.otpModel.findOneAndDelete({
             email: dto.email,
             type: OTPTypeEnum.RESET_PASS,
+            code: dto.code,
             // isVerified: true,
         });
         if (!otp) throw new BadRequestException('Please verify password reset code first');
@@ -148,12 +153,13 @@ export class AuthService extends SerializableService<UserEntity> {
         user.password = await this.getHashedPassword(dto.newPassword);
         await user.save();
 
-        return 'Password reset successful';
+        return 'Password reset is successful';
     }
 
     async resetPasswordSendCode(dto: ResetPasswordSendCodeDto) {
         const user = await this.userService.findByEmail(dto.email);
-        if (!user) throw new NotFoundException('User not found');
+        if (!user) throw new NotFoundException('User is not found');
+
         if (user.authProvider !== AuthProvider.EMAIL)
             throw new BadRequestException('Reset password only works with email registration');
 
@@ -164,8 +170,8 @@ export class AuthService extends SerializableService<UserEntity> {
             type: OTPTypeEnum.RESET_PASS,
         });
         if (otp) {
-            const needToWait = new Date(otp.createdAt as Date).getTime() + this.THREE_MINUTE > Date.now();
-            if (needToWait) throw new BadRequestException('Please wait some time to resend code again');
+            // const needToWait = new Date(otp.createdAt as Date).getTime() + this.THREE_MINUTE > Date.now();
+            // if (needToWait) throw new BadRequestException('Please wait some time to resend code again');
 
             otp.code = token;
             otp.createdAt = new Date();
@@ -179,7 +185,14 @@ export class AuthService extends SerializableService<UserEntity> {
             });
         }
 
-        // await this.mailService.sendResetPasswordEmail(user.email, token);
+        await this.mailService.sendMail({
+            to: dto.email,
+            from: process.env.SEND_GRID_SENDER_EMAIL,
+            subject: 'Reset password OTP',
+            text: `Dear reader. ${'\n'}You requested to reset your password. Your reset code is ${
+                otp.code
+            }. If you didn't request for password change, ignore this email. ${'\n'}Regards, ${'\n'}${'\n'}Fahim,${'\n'}Online Library Management System`,
+        });
 
         return 'OTP sent';
     }
@@ -212,7 +225,7 @@ export class AuthService extends SerializableService<UserEntity> {
             OTP += digits[Math.floor(Math.random() * 10)];
         }
 
-        OTP = '1234';
+        // OTP = '1234';
 
         return OTP;
     }

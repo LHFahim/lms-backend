@@ -21,8 +21,8 @@ export class WalletService extends SerializeService<WalletEntity> {
         if (walletExists) throw new BadRequestException('You already have a wallet');
 
         const doc = await this.walletModel.create({
-            balance: 50,
-            currency: CurrencyEnum.BDT,
+            balance: 30,
+            currency: CurrencyEnum.POINTS,
             isActive: true,
             isDeleted: false,
             owner: userId,

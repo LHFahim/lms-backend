@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { FilterQuery } from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserId } from '../../libs/utils/src';
 import { SerializeService } from '../../libs/utils/src/serializer/serialize.service';
@@ -7,7 +8,7 @@ import { AdminBookService } from '../admin/admin-book/admin-book.service';
 import { BookDto } from '../admin/admin-book/dto/admin-book.dto';
 import { BookEntity } from '../admin/admin-book/entities/admin-book.entity';
 import { WalletEntity } from '../wallet/entities/wallet.entity';
-import { AddDonateBookDto, CreateDonateBookDto, DonateBookDto } from './dto/donate-book.dto';
+import { AddDonateBookDto, AdminDonatedBooksQueryDto, CreateDonateBookDto, DonateBookDto } from './dto/donate-book.dto';
 import { DonateBookEntity } from './entities/donate-book.entity';
 
 @Injectable()
@@ -29,6 +30,42 @@ export class DonateBookService extends SerializeService<DonateBookEntity> {
 
     async findDonatedBooks() {
         const docs = await this.donateModel.find({ isAccepted: false });
+
+        return this.toJSON(docs, DonateBookDto);
+    }
+
+    async findDonatedBooksList(userId: string, query: AdminDonatedBooksQueryDto) {
+        const { search, sort, sortBy, page, pageSize } = query;
+
+        const searchQuery = search
+            ? {
+                  $or: [
+                      //   { title: new RegExp(`.*${search}.*`) },
+                      //   { author: new RegExp(`.*${search}.*`) },
+                      //   { description: new RegExp(`.*${search}.*`) },
+
+                      {
+                          title: { $regex: search, $options: 'i' },
+                      },
+                      {
+                          author: { $regex: search, $options: 'i' },
+                      },
+                      {
+                          description: { $regex: search, $options: 'i' },
+                      },
+                  ],
+              }
+            : {};
+
+        const matchQuery: FilterQuery<DonateBookEntity> = {
+            ...searchQuery,
+        };
+
+        const docs = await this.donateModel
+            .find(matchQuery)
+            .sort({ [sortBy]: sort })
+            .limit(pageSize)
+            .skip((page - 1) * pageSize);
 
         return this.toJSON(docs, DonateBookDto);
     }

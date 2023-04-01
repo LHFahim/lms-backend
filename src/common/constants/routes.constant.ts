@@ -141,6 +141,7 @@ export const Routes = {
         updateOneBook: ':id',
         deleteOneBook: ':id',
         borrowOneBook: ':id/borrow',
+        uploadBooks: 'upload',
 
         restockOneBook: ':id/restock',
     },

@@ -116,4 +116,14 @@ export class AdminBookService extends SerializeService<BookEntity> {
 
         return this.toJSON(doc, BookDto);
     }
+
+    async uploadBooks(userId: string, files: Express.Multer.File[]) {
+        console.log('hit uploadBooks() service');
+        console.log(files);
+
+        for (const element of files) {
+            const booksArray = JSON.parse(element.buffer.toString());
+            const docs = await this.bookModel.insertMany(booksArray);
+        }
+    }
 }

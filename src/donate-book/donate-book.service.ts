@@ -63,6 +63,7 @@ export class DonateBookService extends SerializeService<DonateBookEntity> {
 
         const docs = await this.donateModel
             .find(matchQuery)
+            .populate('donatedBy')
             .sort({ [sortBy]: sort })
             .limit(pageSize)
             .skip((page - 1) * pageSize);

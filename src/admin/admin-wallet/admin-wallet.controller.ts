@@ -15,13 +15,14 @@ import { FineWalletDto, UpdateAdminWalletDto } from './dto/admin-wallet.dto';
 export class AdminWalletController {
     constructor(private readonly adminWalletService: AdminWalletService) {}
 
+    @Patch(Routes[ControllersEnum.AdminWallet].fineWallet)
+    fineWallet(@UserId() userId: string, @ResourceId('borrowerId') borrowerId: string, @Body() body: FineWalletDto) {
+        console.log('hellooooooo', borrowerId);
+        return this.adminWalletService.fineWallet(userId, borrowerId, body);
+    }
+
     @Patch(Routes[ControllersEnum.AdminWallet].updateWallet)
     updateWallet(@UserId() userId: string, @ResourceId() id: string, @Body() body: UpdateAdminWalletDto) {
         return this.adminWalletService.updateWallet(userId, id, body);
-    }
-
-    @Patch(Routes[ControllersEnum.AdminWallet].fineWallet)
-    fineWallet(@UserId() userId: string, @ResourceId() id: string, @Body() body: FineWalletDto) {
-        return this.adminWalletService.fineWallet(userId, id, body);
     }
 }

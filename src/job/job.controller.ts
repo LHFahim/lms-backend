@@ -1,0 +1,27 @@
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { Serialize, UserId } from '../../libs/utils/src';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { APIVersions, ControllersEnum, Routes } from '../common';
+import { CreateJobRequestDto, JobQueryDto } from './dto/job.dto';
+import { JobService } from './job.service';
+
+@ApiTags('Jobs')
+@Serialize()
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@Controller({ path: ControllersEnum.Jobs, version: APIVersions.V1 })
+export class JobController {
+    constructor(private readonly jobService: JobService) {}
+
+    @Get(Routes[ControllersEnum.Jobs].findJobs)
+    findJobs(@Query() query: JobQueryDto) {
+        return this.jobService.findJobs(query);
+    }
+
+    @Post(Routes[ControllersEnum.Jobs].applyForJob)
+    applyForJob(@UserId() userId: string, @Body() body: CreateJobRequestDto) {
+        return this.jobService.applyForJob(userId, body);
+    }
+}

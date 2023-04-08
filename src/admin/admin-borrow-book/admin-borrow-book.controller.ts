@@ -1,10 +1,11 @@
-import { Controller, Delete, Get, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize, UserId } from '../../../libs/utils/src';
 import { ResourceId } from '../../../libs/utils/src/request/validate-resource-ids.decorator';
 import { APIVersions, ControllersEnum, Routes } from '../../common';
 import { JwtAuthGuard } from '../admin-auth/guards/jwt-auth.guard';
 import { AdminBorrowBookService } from './admin-borrow-book.service';
+import { AdminBorrowBooksQueryDto } from './dto/admin-borrow-book.dto';
 
 @ApiTags('Admin ===> Borrow Books')
 @Serialize()
@@ -15,8 +16,8 @@ export class AdminBorrowBookController {
     constructor(private readonly adminBorrowBookService: AdminBorrowBookService) {}
 
     @Get(Routes[ControllersEnum.AdminBorrowBooks].findAllBorrowedBooks)
-    findAllBorrowedBooks(@UserId() userId: string) {
-        return this.adminBorrowBookService.findAllBorrowedBooks(userId);
+    findAllBorrowedBooks(@UserId() userId: string, @Query() query: AdminBorrowBooksQueryDto) {
+        return this.adminBorrowBookService.findAllBorrowedBooks(userId, query);
     }
 
     @Patch(Routes[ControllersEnum.AdminBorrowBooks].acceptReturnBook)

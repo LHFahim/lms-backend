@@ -7,6 +7,7 @@ export enum ControllersEnum {
     AdminBooks = 'admin-books',
     AdminWallet = 'admin-wallet',
     AdminBorrowBooks = 'admin-borrow-books',
+    AdminJobs = 'admin-jobs',
 
     Auth = 'auth',
     Roles = 'roles',
@@ -27,4 +28,5 @@ export enum ControllersEnum {
     Comment = 'comment',
     WaitingList = 'waiting-list',
     DonateBook = 'donate-book',
+    Jobs = 'jobs',
 }

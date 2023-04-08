@@ -50,4 +50,16 @@ export class WalletService extends SerializeService<WalletEntity> {
 
         return this.toJSON(doc, WalletDto);
     }
+
+    async increaseBalanceForJob(userId: string, reward: number) {
+        const doc = await this.walletModel.findOneAndUpdate(
+            { owner: userId },
+            { $inc: { balance: reward } },
+            { new: true },
+        );
+
+        if (!doc) throw new NotFoundException('Wallet is not found');
+
+        return this.toJSON(doc, WalletDto);
+    }
 }

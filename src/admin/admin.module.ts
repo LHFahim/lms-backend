@@ -3,6 +3,7 @@ import { AdminAuthModule } from './admin-auth/auth.module';
 import { AdminBookModule } from './admin-book/admin-book.module';
 import { AdminBorrowBookModule } from './admin-borrow-book/admin-borrow-book.module';
 import { AdminClientModule } from './admin-client/admin-client.module';
+import { AdminJobModule } from './admin-job/admin-job.module';
 import { AdminProfitModule } from './admin-profit/admin-profit.module';
 import { AdminUserModule } from './admin-user/admin-user.module';
 import { AdminWalletModule } from './admin-wallet/admin-wallet.module';
@@ -16,6 +17,7 @@ import { AdminWalletModule } from './admin-wallet/admin-wallet.module';
         AdminWalletModule,
         AdminProfitModule,
         AdminBorrowBookModule,
+        AdminJobModule,
     ],
 })
 export class AdminModule {}

@@ -96,6 +96,10 @@ export const Routes = {
         findUserDonatedBooks: 'user-donated',
         addDonatedBookToSystem: ':id',
     },
+    [ControllersEnum.Jobs]: {
+        findJobs: '',
+        applyForJob: ':id/apply',
+    },
 
     // admin routes below
     [ControllersEnum.AdminStatus]: {
@@ -154,5 +158,14 @@ export const Routes = {
         acceptReturnBook: ':bookId/:borrowerId/accept',
         approveRequest: ':bookId/:requesterId/approve',
         declineRequest: ':bookId/:requesterId/decline',
+    },
+    [ControllersEnum.AdminJobs]: {
+        createJob: '',
+        findJobs: '',
+        findOneJob: ':id',
+        updateOneJob: ':id',
+        deleteOneJob: ':id',
+        approveJobRequest: ':jobRequestId/approve',
+        completeJob: ':jobRequestId/complete',
     },
 };

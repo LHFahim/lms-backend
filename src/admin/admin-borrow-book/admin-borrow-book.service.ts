@@ -4,6 +4,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { differenceInDays } from 'date-fns';
 
+import { FilterQuery } from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { BorrowBookEntity } from '../../borrow-book/entities/borrow-book.entity';
 import { BorrowRequestEntity } from '../../borrow-book/entities/borrow-request.entity';
@@ -15,7 +16,7 @@ import { AdminAuthService } from '../admin-auth/auth.service';
 import { BookDto } from '../admin-book/dto/admin-book.dto';
 import { UserEntity } from './../../user/entities/user.entity';
 import { BookEntity } from './../admin-book/entities/admin-book.entity';
-import { AdminBorrowBookDto } from './dto/admin-borrow-book.dto';
+import { AdminBorrowBookDto, AdminBorrowBooksQueryDto } from './dto/admin-borrow-book.dto';
 
 @Injectable()
 export class AdminBorrowBookService extends SerializableService<BorrowBookEntity> {
@@ -34,12 +35,104 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         super(BorrowBookEntity);
     }
 
-    async findAllBorrowedBooks(userId: string) {
+    async findAllBorrowedBooksssssss(userId: string, query: AdminBorrowBooksQueryDto) {
         if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
+        const { search, sort, sortBy, page, pageSize } = query;
+
+        const searchQuery = search
+            ? {
+                  $or: [
+                      //   { title: new RegExp(`.*${search}.*`) },
+                      //   { author: new RegExp(`.*${search}.*`) },
+                      //   { description: new RegExp(`.*${search}.*`) },
+
+                      {
+                          title: { $regex: search, $options: 'i' },
+                      },
+                      {
+                          author: { $regex: search, $options: 'i' },
+                      },
+                      {
+                          description: { $regex: search, $options: 'i' },
+                      },
+                  ],
+              }
+            : {};
+
+        const matchQuery: FilterQuery<BorrowBookEntity> = {
+            ...searchQuery,
+        };
 
         const docs = await this.borrowBookModel.find({ isReturned: false }).populate('bookId').populate('borrower');
 
         return this.toJSON(docs, AdminBorrowBookDto);
+    }
+
+    async findAllBorrowedBooks(userId: string, query: AdminBorrowBooksQueryDto) {
+        const { search, sort, sortBy, page, pageSize } = query;
+
+        const searchQuery = search
+            ? {
+                  $or: [
+                      {
+                          'book.title': { $regex: search, $options: 'i' },
+                      },
+                      {
+                          'book.author': { $regex: search, $options: 'i' },
+                      },
+                      {
+                          'book.description': { $regex: search, $options: 'i' },
+                      },
+                      {
+                          'borrower.email': { $regex: search, $options: 'i' },
+                      },
+                  ],
+              }
+            : {};
+
+        const matchQuery: FilterQuery<BorrowBookEntity> = {
+            ...searchQuery,
+        };
+        console.log(search, 'searchQuery %o ', searchQuery);
+
+        const results = await this.borrowBookModel.aggregate([
+            {
+                $match: { isReturned: false },
+            },
+            {
+                $lookup: {
+                    from: 'books',
+                    localField: 'bookId',
+                    foreignField: '_id',
+                    as: 'retrievedBook',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'borrower',
+                    foreignField: '_id',
+                    as: 'retrievedUser',
+                },
+            },
+            {
+                $project: {
+                    book: { $arrayElemAt: ['$retrievedBook', 0] },
+                    borrower: { $arrayElemAt: ['$retrievedUser', 0] },
+                },
+            },
+            {
+                $match: matchQuery,
+            },
+        ]);
+
+        console.log(
+            '🚀 ~ file: admin-borrow-book.service.ts:80 ~ AdminBorrowBookService ~ findAllBorrowedBooks ~ results: %o',
+            results,
+        );
+
+        return results;
     }
 
     async acceptReturnBook(userId: string, bookId: string, borrowerId: string) {

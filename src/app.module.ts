@@ -14,10 +14,11 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BooksModule } from './books/books.module';
 import { BorrowBookModule } from './borrow-book/borrow-book.module';
 import { DiscussionModule } from './discussion/discussion.module';
-import { UserModule } from './user/user.module';
-import { WalletModule } from './wallet/wallet.module';
-import { WaitingListModule } from './waiting-list/waiting-list.module';
 import { DonateBookModule } from './donate-book/donate-book.module';
+import { UserModule } from './user/user.module';
+import { WaitingListModule } from './waiting-list/waiting-list.module';
+import { WalletModule } from './wallet/wallet.module';
+import { JobModule } from './job/job.module';
 
 @Module({
     imports: [
@@ -65,6 +66,8 @@ import { DonateBookModule } from './donate-book/donate-book.module';
         WaitingListModule,
 
         DonateBookModule,
+
+        JobModule,
     ],
     controllers: [AppController],
     providers: [AppService],

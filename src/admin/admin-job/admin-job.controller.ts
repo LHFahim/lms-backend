@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Serialize } from '../../../libs/utils/src';
 import { ResourceId } from '../../../libs/utils/src/request/validate-resource-ids.decorator';
@@ -28,5 +28,15 @@ export class AdminJobController {
     @Patch(Routes[ControllersEnum.AdminJobs].completeJob)
     completeJob(@ResourceId('jobRequestId') jobRequestId: string) {
         return this.adminJobService.completeJob(jobRequestId);
+    }
+
+    @Get(Routes[ControllersEnum.AdminJobs].findJobRequests)
+    findJobRequests() {
+        return this.adminJobService.findJobRequests();
+    }
+
+    @Get(Routes[ControllersEnum.AdminJobs].findJobRequestsForCompletion)
+    findJobRequestsForCompletion() {
+        return this.adminJobService.findJobRequestsForCompletion();
     }
 }

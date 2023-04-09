@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { SerializeService } from '../../../libs/utils/src/serializer/serialize.service';
@@ -63,5 +63,19 @@ export class AdminJobService extends SerializeService<JobEntity> {
         );
 
         return this.toJSON(jobRequest, JobRequestDto);
+    }
+
+    async findJobRequests() {
+        const docs = await this.jobRequestModel.find({ isAssigned: false }).populate('job').populate('requester');
+        if (!docs) throw new NotFoundException('No job request is found');
+
+        return this.toJSONs(docs, JobRequestDto);
+    }
+
+    async findJobRequestsForCompletion() {
+        const docs = await this.jobRequestModel.find({ isDeleted: false }).populate('job').populate('requester');
+        if (!docs) throw new NotFoundException('No job request is found');
+
+        return this.toJSONs(docs, JobRequestDto);
     }
 }

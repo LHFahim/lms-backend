@@ -98,7 +98,7 @@ export const Routes = {
     },
     [ControllersEnum.Jobs]: {
         findJobs: '',
-        applyForJob: ':id/apply',
+        applyForJob: 'apply',
     },
 
     // admin routes below
@@ -167,5 +167,7 @@ export const Routes = {
         deleteOneJob: ':id',
         approveJobRequest: ':jobRequestId/approve',
         completeJob: ':jobRequestId/complete',
+        findJobRequests: 'requests',
+        findJobRequestsForCompletion: 'completion/requests',
     },
 };

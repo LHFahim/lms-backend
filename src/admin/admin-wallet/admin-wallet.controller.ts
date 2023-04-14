@@ -17,7 +17,6 @@ export class AdminWalletController {
 
     @Patch(Routes[ControllersEnum.AdminWallet].fineWallet)
     fineWallet(@UserId() userId: string, @ResourceId('borrowerId') borrowerId: string, @Body() body: FineWalletDto) {
-        console.log('hellooooooo', borrowerId);
         return this.adminWalletService.fineWallet(userId, borrowerId, body);
     }
 

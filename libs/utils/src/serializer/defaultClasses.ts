@@ -1,13 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop } from '@typegoose/typegoose';
-import { Expose } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
+import { IsString } from 'class-validator';
 import { Types } from 'mongoose';
-import { ObjectID } from './ObjectID.decorator';
 
 export class DocumentCT {
     @ApiProperty({ name: 'id', type: String })
-    @ObjectID()
+    // @ObjectID()
     @Expose({ name: 'id' })
+    @IsString()
+    @Type(() => Types.ObjectId)
+    @Transform((params) => params.obj._id.toString())
     _id?: Types.ObjectId;
 }
 

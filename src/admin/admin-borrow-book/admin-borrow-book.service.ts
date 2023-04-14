@@ -16,7 +16,11 @@ import { AdminAuthService } from '../admin-auth/auth.service';
 import { BookDto } from '../admin-book/dto/admin-book.dto';
 import { UserEntity } from './../../user/entities/user.entity';
 import { BookEntity } from './../admin-book/entities/admin-book.entity';
-import { AdminBorrowBookDto, AdminBorrowBooksQueryDto } from './dto/admin-borrow-book.dto';
+import {
+    AdminBorrowBookAggregationDto,
+    AdminBorrowBookDto,
+    AdminBorrowBooksQueryDto,
+} from './dto/admin-borrow-book.dto';
 
 @Injectable()
 export class AdminBorrowBookService extends SerializableService<BorrowBookEntity> {
@@ -69,7 +73,10 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         return this.toJSON(docs, AdminBorrowBookDto);
     }
 
-    async findAllBorrowedBooks(userId: string, query: AdminBorrowBooksQueryDto) {
+    async findAllBorrowedBooks(
+        userId: string,
+        query: AdminBorrowBooksQueryDto,
+    ): Promise<AdminBorrowBookAggregationDto[]> {
         const { search, sort, sortBy, page, pageSize } = query;
 
         const searchQuery = search
@@ -94,26 +101,41 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         const matchQuery: FilterQuery<BorrowBookEntity> = {
             ...searchQuery,
         };
-        console.log(search, 'searchQuery %o ', searchQuery);
 
         const results = await this.borrowBookModel.aggregate([
             {
                 $match: { isReturned: false },
             },
+
             {
                 $lookup: {
                     from: 'books',
                     localField: 'bookId',
                     foreignField: '_id',
                     as: 'retrievedBook',
+                    pipeline: [
+                        {
+                            $addFields: {
+                                id: { $toString: '$_id' },
+                            },
+                        },
+                    ],
                 },
             },
+
             {
                 $lookup: {
                     from: 'users',
                     localField: 'borrower',
                     foreignField: '_id',
                     as: 'retrievedUser',
+                    pipeline: [
+                        {
+                            $addFields: {
+                                id: { $toString: '$_id' },
+                            },
+                        },
+                    ],
                 },
             },
             {
@@ -126,11 +148,6 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
                 $match: matchQuery,
             },
         ]);
-
-        console.log(
-            '🚀 ~ file: admin-borrow-book.service.ts:80 ~ AdminBorrowBookService ~ findAllBorrowedBooks ~ results: %o',
-            results,
-        );
 
         return results;
     }
@@ -269,7 +286,7 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
 
         docs.forEach(async (data) => {
             const { borrower, bookId } = data;
-            console.log(bookId);
+
             const userEmail = (borrower as UserEntity).email;
             const borrowedBook = (bookId as BookEntity).title;
             const author = (bookId as BookEntity).author;

@@ -66,7 +66,6 @@ export class AdminAuthController {
     @ApiImageFile({ fieldName: 'avatar', required: true }, { limits: { fileSize: 10 * 1024 * 1024, files: 1 } })
     @Post(Routes[ControllersEnum.AdminAuth].myProfileUpdateAvatar)
     updateAvatar(@UserId() userId: string, @UploadedFile() file: Express.Multer.File) {
-        console.log(file);
         return this.authService.updateAvatar(userId, file);
     }
 

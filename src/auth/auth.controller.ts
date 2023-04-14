@@ -45,7 +45,6 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Post(Routes[ControllersEnum.Auth].sendVerificationEmail)
     async sendVerificationEmail(@UserId() userId: string) {
-        console.log(userId);
         // return this.authService.sendVerificationEmail(userId);
     }
 

@@ -38,7 +38,6 @@ export class CommentService extends SerializeService<CommentEntity> {
 
     async deleteComment(userId: string, discussion: string, _id: string) {
         const doc = await this.commentModel.findOneAndDelete({ _id, discussion, madeBy: userId });
-        console.log('🚀 ~ file: comment.service.ts:41 ~ CommentService ~ deleteComment ~ doc:', doc);
         if (!doc) throw new BadRequestException('This request cannot be completed');
 
         const disDoc = await this.discussionModel.findOneAndUpdate(

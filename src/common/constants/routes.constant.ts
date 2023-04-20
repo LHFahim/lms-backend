@@ -167,6 +167,7 @@ export const Routes = {
         updateOneJob: ':id',
         deleteOneJob: ':id',
         approveJobRequest: ':jobRequestId/approve',
+        declineJobRequest: ':jobRequestId/decline',
         completeJob: ':jobRequestId/complete',
         findJobRequests: 'requests',
         findJobRequestsForCompletion: 'completion/requests',

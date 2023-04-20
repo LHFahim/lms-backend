@@ -68,7 +68,10 @@ export class AdminJobService extends SerializeService<JobEntity> {
     }
 
     async findJobRequests() {
-        const docs = await this.jobRequestModel.find({ isAssigned: false }).populate('job').populate('requester');
+        const docs = await this.jobRequestModel
+            .find({ isAssigned: false, isDeleted: false })
+            .populate('job')
+            .populate('requester');
         if (!docs) throw new NotFoundException('No job request is found');
 
         return this.toJSONs(docs, JobRequestDto);
@@ -79,5 +82,11 @@ export class AdminJobService extends SerializeService<JobEntity> {
         if (!docs) throw new NotFoundException('No job request is found');
 
         return this.toJSONs(docs, JobRequestDto);
+    }
+
+    async declineJobRequest(jobRequestId: string) {
+        const doc = await this.jobRequestModel.findByIdAndDelete(jobRequestId);
+
+        return true;
     }
 }

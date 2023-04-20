@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Ref } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
-import { IsArray, IsBoolean, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 import { DocumentCTWithTimeStamps, Model } from '../../../../libs/utils/src';
 import { UserEntity } from '../../../user/entities/user.entity';
 
@@ -22,7 +22,6 @@ export class JobEntity extends DocumentCTWithTimeStamps {
     description: string;
 
     @Expose()
-    @IsNumber()
     @IsNotEmpty()
     @ApiProperty({ required: false, minimum: 10 })
     @Prop({ required: false, trim: true, min: 10 })

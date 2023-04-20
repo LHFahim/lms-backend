@@ -62,4 +62,15 @@ export class JobService extends SerializeService<JobEntity> {
 
         return this.toJSON(doc, JobRequestDto);
     }
+
+    async withdrawFromJob(userId: string, id: string) {
+        const jobRequest = await this.jobRequestModel.findOneAndDelete({
+            job: id,
+            requester: userId,
+            isAssigned: false,
+        });
+        if (!jobRequest) throw new NotFoundException('No job request was found');
+
+        return true;
+    }
 }

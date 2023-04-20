@@ -134,6 +134,7 @@ export class AuthService extends SerializableService<UserEntity> {
     }
 
     async resetPassword(dto: ResetPasswordDto) {
+        console.log('hit resetPassword');
         if (dto.newPassword !== dto.confirmNewPassword) throw new BadRequestException('Passwords does not match');
 
         const user = await this.userService.findByEmail(dto.email);
@@ -152,6 +153,8 @@ export class AuthService extends SerializableService<UserEntity> {
 
         user.password = await this.getHashedPassword(dto.newPassword);
         await user.save();
+
+        console.log('Password reset is successful');
 
         return 'Password reset is successful';
     }

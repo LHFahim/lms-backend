@@ -99,6 +99,7 @@ export const Routes = {
     [ControllersEnum.Jobs]: {
         findJobs: '',
         applyForJob: 'apply',
+        withdrawFromJob: ':id/withdraw',
     },
 
     // admin routes below

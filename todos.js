@@ -27,3 +27,14 @@ TODO: show admin all the borrowed books - by user
 TODO: admin - user management to show all borrowed, donated, returned books
 TODO: admin to see all the borrowed, and donated books
 */
+
+/*
+19th APril, 2023
+TODO: fix layout for login and registration, forgot password - done
+TODO: Write down the functions for both user and admin 
+TODO: let user withdraw from a job request, let admin reject the request
+TODO: job modification for admin
+TODO: first check wallet balance and then allow extend
+FIXME: See borrowed book list from here for admin
+TODO: add a page for recharging balance points for admin
+*/

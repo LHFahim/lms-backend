@@ -25,6 +25,8 @@ export class AdminJobService extends SerializeService<JobEntity> {
     async createJob(body: CreateAdminJobDto) {
         const doc = await this.jobModel.create({ ...body, isAvailable: true, isDeleted: false, assignedTo: [] });
 
+        console.log('🚀 ~ file: admin-job.service.ts:28 ~ AdminJobService ~ createJob ~ doc:', doc);
+
         return this.toJSON(doc, JobDto);
     }
 

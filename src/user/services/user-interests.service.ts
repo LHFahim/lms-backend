@@ -17,6 +17,7 @@ export class UserInterestsService extends SerializableService<UserInterestsEntit
 
     async findUserInterests(userId: string) {
         const doc = await this.interestModel.findOne({ user: userId }).populate('booksRead', '', 'BookEntity');
+
         if (!doc) throw new NotFoundException('No user interests is found');
 
         const interestsFromPrevBooks = doc.interests;

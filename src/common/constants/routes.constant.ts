@@ -151,7 +151,9 @@ export const Routes = {
         restockOneBook: ':id/restock',
     },
     [ControllersEnum.AdminWallet]: {
+        queryWallet: '',
         updateWallet: ':id',
+        rechargeWallet: ':id/recharge',
         fineWallet: ':borrowerId/fine',
     },
     [ControllersEnum.AdminBorrowBooks]: {

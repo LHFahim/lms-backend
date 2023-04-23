@@ -19,6 +19,10 @@ export class AdminJobController {
     createJob(@Body() body: CreateAdminJobDto) {
         return this.adminJobService.createJob(body);
     }
+    @Get(Routes[ControllersEnum.AdminJobs].findJobs)
+    findJobs() {
+        return this.adminJobService.findJobs();
+    }
 
     @Patch(Routes[ControllersEnum.AdminJobs].approveJobRequest)
     approveJobRequest(@ResourceId('jobRequestId') jobRequestId: string) {
@@ -43,5 +47,10 @@ export class AdminJobController {
     @Get(Routes[ControllersEnum.AdminJobs].findJobRequestsForCompletion)
     findJobRequestsForCompletion() {
         return this.adminJobService.findJobRequestsForCompletion();
+    }
+
+    @Delete(Routes[ControllersEnum.AdminJobs].deleteOneJob)
+    deleteOneJob(@ResourceId() id: string) {
+        return this.adminJobService.deleteOneJob(id);
     }
 }

@@ -25,9 +25,13 @@ export class AdminJobService extends SerializeService<JobEntity> {
     async createJob(body: CreateAdminJobDto) {
         const doc = await this.jobModel.create({ ...body, isAvailable: true, isDeleted: false, assignedTo: [] });
 
-        console.log('🚀 ~ file: admin-job.service.ts:28 ~ AdminJobService ~ createJob ~ doc:', doc);
-
         return this.toJSON(doc, JobDto);
+    }
+
+    async findJobs() {
+        const docs = await this.jobModel.find({ isAvailable: true, isDeleted: false });
+
+        return this.toJSONs(docs, JobDto);
     }
 
     async approveJobRequest(jobRequestId: string) {
@@ -88,5 +92,16 @@ export class AdminJobService extends SerializeService<JobEntity> {
         const doc = await this.jobRequestModel.findByIdAndDelete(jobRequestId);
 
         return true;
+    }
+
+    async deleteOneJob(id: string) {
+        console.log('hit deleteOneJob');
+        const doc = await this.jobModel.findOneAndUpdate(
+            { _id: id, isAvailable: true, isDeleted: false },
+            { isAvailable: false, isDeleted: true },
+            { new: true },
+        );
+        if (!doc) throw new NotFoundException('Job was not found');
+        return this.toJSON(doc, JobDto);
     }
 }

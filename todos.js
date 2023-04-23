@@ -32,7 +32,7 @@ TODO: admin to see all the borrowed, and donated books
 19th APril, 2023
 TODO: fix layout for login and registration, forgot password - done
 TODO: Write down the functions for both user and admin 
-TODO: let user withdraw from a job request, let admin reject the request
+TODO: let user withdraw from a job request, let admin reject the request - done
 TODO: job modification for admin
 TODO: first check wallet balance and then allow extend
 FIXME: See borrowed book list from here for admin

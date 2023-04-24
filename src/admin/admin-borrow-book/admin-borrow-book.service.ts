@@ -77,6 +77,8 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
         userId: string,
         query: AdminBorrowBooksQueryDto,
     ): Promise<AdminBorrowBookAggregationDto[]> {
+        if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
         const { search, sort, sortBy, page, pageSize } = query;
 
         const searchQuery = search

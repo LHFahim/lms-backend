@@ -21,7 +21,9 @@ export class AdminWalletService extends SerializableService<WalletEntity> {
         super(WalletEntity);
     }
 
-    async queryWallet(query: AdminWalletQueryDto) {
+    async queryWallet(userId: string, query: AdminWalletQueryDto) {
+        if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
         const doc = await this.walletModel.aggregate([
             { $match: { isActive: true, isDeleted: false } },
             {
@@ -60,12 +62,12 @@ export class AdminWalletService extends SerializableService<WalletEntity> {
             { $unwind: '$walletDoc' },
         ]);
 
-        console.log('🚀 ~ file: admin-wallet.service.ts:21 ~ AdminWalletService ~ queryWallet ~ docs: %o', doc);
-
         return doc;
     }
 
-    async rechargeWallet(_id: string, body: AdminRechargeWalletDto) {
+    async rechargeWallet(userId: string, _id: string, body: AdminRechargeWalletDto) {
+        if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
         const doc = await this.walletModel.findOneAndUpdate(
             { _id, isActive: true, isDeleted: false },
             { $inc: { balance: body.balance } },
@@ -76,6 +78,8 @@ export class AdminWalletService extends SerializableService<WalletEntity> {
     }
 
     async updateWallet(userId: string, _id: string, body: UpdateAdminWalletDto) {
+        if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
         const doc = await this.walletModel.findOneAndUpdate({ _id }, { balance: body.balance }, { new: true });
 
         if (!doc) throw new NotFoundException('Wallet is not found');

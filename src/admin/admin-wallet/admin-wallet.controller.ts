@@ -21,13 +21,13 @@ export class AdminWalletController {
     constructor(private readonly adminWalletService: AdminWalletService) {}
 
     @Get(Routes[ControllersEnum.AdminWallet].queryWallet)
-    queryWallet(@Query() query: AdminWalletQueryDto) {
-        return this.adminWalletService.queryWallet(query);
+    queryWallet(@UserId() userId: string, @Query() query: AdminWalletQueryDto) {
+        return this.adminWalletService.queryWallet(userId, query);
     }
 
     @Patch(Routes[ControllersEnum.AdminWallet].rechargeWallet)
-    rechargeWallet(@ResourceId() id: string, @Body() body: AdminRechargeWalletDto) {
-        return this.adminWalletService.rechargeWallet(id, body);
+    rechargeWallet(@UserId() userId: string, @ResourceId() id: string, @Body() body: AdminRechargeWalletDto) {
+        return this.adminWalletService.rechargeWallet(userId, id, body);
     }
 
     @Patch(Routes[ControllersEnum.AdminWallet].fineWallet)

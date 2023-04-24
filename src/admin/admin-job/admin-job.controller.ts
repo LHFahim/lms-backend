@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Serialize } from '../../../libs/utils/src';
+import { Serialize, UserId } from '../../../libs/utils/src';
 import { ResourceId } from '../../../libs/utils/src/request/validate-resource-ids.decorator';
 import { APIVersions, ControllersEnum, Routes } from '../../common';
 import { JwtAuthGuard } from '../admin-auth/guards/jwt-auth.guard';
@@ -16,41 +16,41 @@ export class AdminJobController {
     constructor(private readonly adminJobService: AdminJobService) {}
 
     @Post(Routes[ControllersEnum.AdminJobs].createJob)
-    createJob(@Body() body: CreateAdminJobDto) {
-        return this.adminJobService.createJob(body);
+    createJob(@UserId() userId: string, @Body() body: CreateAdminJobDto) {
+        return this.adminJobService.createJob(userId, body);
     }
     @Get(Routes[ControllersEnum.AdminJobs].findJobs)
-    findJobs() {
-        return this.adminJobService.findJobs();
+    findJobs(@UserId() userId: string) {
+        return this.adminJobService.findJobs(userId);
     }
 
     @Patch(Routes[ControllersEnum.AdminJobs].approveJobRequest)
-    approveJobRequest(@ResourceId('jobRequestId') jobRequestId: string) {
-        return this.adminJobService.approveJobRequest(jobRequestId);
+    approveJobRequest(@UserId() userId: string, @ResourceId('jobRequestId') jobRequestId: string) {
+        return this.adminJobService.approveJobRequest(userId, jobRequestId);
     }
 
     @Delete(Routes[ControllersEnum.AdminJobs].declineJobRequest)
-    declineJobRequest(@ResourceId('jobRequestId') jobRequestId: string) {
-        return this.adminJobService.declineJobRequest(jobRequestId);
+    declineJobRequest(@UserId() userId: string, @ResourceId('jobRequestId') jobRequestId: string) {
+        return this.adminJobService.declineJobRequest(userId, jobRequestId);
     }
 
     @Patch(Routes[ControllersEnum.AdminJobs].completeJob)
-    completeJob(@ResourceId('jobRequestId') jobRequestId: string) {
-        return this.adminJobService.completeJob(jobRequestId);
+    completeJob(@UserId() userId: string, @ResourceId('jobRequestId') jobRequestId: string) {
+        return this.adminJobService.completeJob(userId, jobRequestId);
     }
 
     @Get(Routes[ControllersEnum.AdminJobs].findJobRequests)
-    findJobRequests() {
-        return this.adminJobService.findJobRequests();
+    findJobRequests(@UserId() userId: string) {
+        return this.adminJobService.findJobRequests(userId);
     }
 
     @Get(Routes[ControllersEnum.AdminJobs].findJobRequestsForCompletion)
-    findJobRequestsForCompletion() {
-        return this.adminJobService.findJobRequestsForCompletion();
+    findJobRequestsForCompletion(@UserId() userId: string) {
+        return this.adminJobService.findJobRequestsForCompletion(userId);
     }
 
     @Delete(Routes[ControllersEnum.AdminJobs].deleteOneJob)
-    deleteOneJob(@ResourceId() id: string) {
-        return this.adminJobService.deleteOneJob(id);
+    deleteOneJob(@UserId() userId: string, @ResourceId() id: string) {
+        return this.adminJobService.deleteOneJob(userId, id);
     }
 }

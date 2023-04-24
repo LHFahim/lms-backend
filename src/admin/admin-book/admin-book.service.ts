@@ -118,6 +118,8 @@ export class AdminBookService extends SerializeService<BookEntity> {
     }
 
     async uploadBooks(userId: string, files: Express.Multer.File[]) {
+        if (!(await this.adminAuthService.isAdmin(userId))) throw new BadRequestException('This is for admin');
+
         for (const element of files) {
             const booksArray = JSON.parse(element.buffer.toString());
             const docs = await this.bookModel.insertMany(booksArray);

@@ -38,3 +38,11 @@ TODO: first check wallet balance and then allow extend
 FIXME: See borrowed book list from here for admin
 TODO: add a page for recharging balance points for admin
 */
+
+/*
+24th April
+
+TODO: Approve request layout change
+FIXME job reward does not get added to user's wallet
+FIXME borrow list page is broken for admin
+*/

@@ -71,7 +71,6 @@ export class AdminWalletService extends SerializableService<WalletEntity> {
             { $inc: { balance: body.balance } },
             { new: true },
         );
-        console.log('🚀 ~ file: admin-wallet.service.ts:74 ~ AdminWalletService ~ rechargeWallet ~ doc:', doc);
 
         return this.toJSON(doc, AdminWalletDto);
     }

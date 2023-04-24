@@ -52,6 +52,7 @@ export class WalletService extends SerializeService<WalletEntity> {
     }
 
     async increaseBalanceForJob(userId: string, reward: number) {
+        console.log(userId, reward);
         const doc = await this.walletModel.findOneAndUpdate(
             { owner: userId },
             { $inc: { balance: reward } },

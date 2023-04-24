@@ -46,31 +46,6 @@ export class AdminJobService extends SerializeService<JobEntity> {
         return this.toJSON(doc, JobRequestDto);
     }
 
-    async completeJob(jobRequestId: string) {
-        const jobRequest = await this.jobRequestModel.findByIdAndUpdate(
-            jobRequestId,
-            { isDeleted: true },
-            { new: true },
-        );
-
-        const completeJob = await this.completeJobModel.create({
-            job: jobRequest.job,
-            assignee: jobRequest.requester,
-            jobRequestId: jobRequest.id,
-        });
-
-        const job = await this.jobModel.findById({
-            _id: jobRequest.job,
-        });
-
-        const transferBalance = await this.walletService.increaseBalanceForJob(
-            jobRequest.requester.toString(),
-            job.reward,
-        );
-
-        return this.toJSON(jobRequest, JobRequestDto);
-    }
-
     async findJobRequests() {
         const docs = await this.jobRequestModel
             .find({ isAssigned: false, isDeleted: false })
@@ -103,5 +78,32 @@ export class AdminJobService extends SerializeService<JobEntity> {
         );
         if (!doc) throw new NotFoundException('Job was not found');
         return this.toJSON(doc, JobDto);
+    }
+
+    async completeJob(jobRequestId: string) {
+        console.log('hit completeJob()');
+
+        const jobRequest = await this.jobRequestModel.findByIdAndUpdate(
+            jobRequestId,
+            { isDeleted: true },
+            { new: true },
+        );
+
+        const completeJob = await this.completeJobModel.create({
+            job: jobRequest.job,
+            assignee: jobRequest.requester,
+            jobRequestId: jobRequest.id,
+        });
+
+        const job = await this.jobModel.findById({
+            _id: jobRequest.job,
+        });
+
+        const transferBalance = await this.walletService.increaseBalanceForJob(
+            jobRequest.requester.toString(),
+            job.reward,
+        );
+
+        return this.toJSON(jobRequest, JobRequestDto);
     }
 }

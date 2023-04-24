@@ -142,13 +142,15 @@ export class AdminBorrowBookService extends SerializableService<BorrowBookEntity
                 $project: {
                     book: { $arrayElemAt: ['$retrievedBook', 0] },
                     borrower: { $arrayElemAt: ['$retrievedUser', 0] },
+                    borrowedDate: 1,
+                    returnDate: 1,
+                    isReturned: 1,
                 },
             },
             {
                 $match: matchQuery,
             },
         ]);
-
         return results;
     }
 
